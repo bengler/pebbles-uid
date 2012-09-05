@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "pebbles-uid"
   gem.require_paths = ["lib"]
   gem.version       = Pebbles::Uid::VERSION
+
+  gem.add_development_dependency "rspec"
 end
