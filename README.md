@@ -1,6 +1,8 @@
 # Pebbles::Uid
 
-TODO: Write a gem description
+Handle pebble UIDs conveniently.
+
+Unique identifiers in the Pebblestack universe, in the format species[.genus]:path$oid, where the path is a dot-delimited set of labels, the first of which (realm) is required.
 
 ## Installation
 
@@ -24,6 +26,6 @@ TODO: Write usage instructions here
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
