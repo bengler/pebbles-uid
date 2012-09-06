@@ -1,15 +1,10 @@
 module Pebbles
   class Uid
     class Labels
-      include Enumerable
 
       attr_reader :values, :prefix
       def initialize(*values)
         @values = values.flatten.map {|v| v.split('.') }.flatten
-      end
-
-      def each
-        values.each { |value| yield value }
       end
 
       def tail
