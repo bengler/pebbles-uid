@@ -28,6 +28,10 @@ module Pebbles
         values.join('.')
       end
 
+      def empty?
+        values.empty?
+      end
+
       def to_hash(options = {})
         Conditions.new(values, options).to_hash
       end
