@@ -14,6 +14,8 @@ describe Pebbles::Uid do
   its(:path) { should eq('tourism.norway.fjords') }
   its(:oid) { should eq('1234') }
 
+  its(:cache_key) { should eq('post.card:tourism$1234') }
+
   its(:valid?) { should be_true }
 
   specify ":to_hash creates reasonable query params (e.g. for active record)" do

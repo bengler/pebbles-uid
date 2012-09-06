@@ -28,9 +28,7 @@ module Pebbles
     end
 
     def parsed
-      a = [@species.to_s, @path.to_s]
-      a << @oid.to_s unless @oid.empty?
-      a
+      [species, path, oid].compact
     end
 
     def realm
@@ -51,6 +49,10 @@ module Pebbles
 
     def oid
       @oid.empty? ? nil : @oid.to_s
+    end
+
+    def cache_key
+      "#{species}:#{realm}$#{oid}"
     end
 
     def to_hash(options = {})
