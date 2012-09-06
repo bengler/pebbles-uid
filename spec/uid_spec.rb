@@ -51,4 +51,15 @@ describe Pebbles::Uid do
     subject.to_hash(:verbose => true, :suffix => 'xyz', :species => 'klass', :path => 'label', :oid => 'id').should eq(expected)
   end
 
+  context "when pending creation" do
+
+    let(:uid) { 'post.doc:universities.europe.norway' }
+    subject { Pebbles::Uid.new(uid) }
+
+    its(:to_s) { should eq(uid) }
+    its(:parsed) { should eq(['post.doc', 'universities.europe.norway']) }
+    its(:oid) { should be_nil }
+
+  end
+
 end

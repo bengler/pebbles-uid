@@ -22,6 +22,7 @@ module Pebbles
       def to_s
         values.join('.')
       end
+      alias :value :to_s
 
       def empty?
         values.empty?

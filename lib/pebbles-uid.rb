@@ -10,7 +10,7 @@ module Pebbles
   class Uid
 
     def initialize(s)
-      /^(?<species>.*):(?<path>[^\$]*)\$(?<oid>.*)$/ =~ s
+      /^(?<species>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
       @species = Species.new(species)
       @path = Path.new(path)
       @oid = Oid.new(oid)
@@ -21,11 +21,16 @@ module Pebbles
     end
 
     def to_s
-      "#{@species}:#{@path}$#{@oid}"
+      s = @species.to_s
+      s << ":#{@path}"
+      s << "$#{@oid}" unless @oid.empty?
+      s
     end
 
     def parsed
-      [@species.to_s, @path.to_s, @oid.to_s]
+      a = [@species.to_s, @path.to_s]
+      a << @oid.to_s unless @oid.empty?
+      a
     end
 
     def realm
@@ -45,7 +50,7 @@ module Pebbles
     end
 
     def oid
-      @oid.to_s
+      @oid.empty? ? nil : @oid.to_s
     end
 
     def to_hash(options = {})
