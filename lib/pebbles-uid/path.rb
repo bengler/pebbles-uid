@@ -7,7 +7,7 @@ module Pebbles
       end
 
       def to_hash(options = {})
-        super({:name => 'label'}.merge(options))
+        super({:name => 'path'}.merge(options))
       end
 
       def valid?
