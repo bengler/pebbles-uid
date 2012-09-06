@@ -24,7 +24,7 @@ module Pebbles
       end
 
       def to_hash
-        return {name => values.join('.')} unless verbose?
+        return {label => values.join('.')} unless verbose?
 
         collection = {}
         values.each_with_index do |value, i|
@@ -36,7 +36,7 @@ module Pebbles
         collection
       end
 
-      def label(i)
+      def label(i = nil)
         [name, i, suffix].compact.join('_')
       end
 
