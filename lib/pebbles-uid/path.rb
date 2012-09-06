@@ -1,30 +1,17 @@
 module Pebbles
   class Uid
-    class Path
-
-      attr_reader :labels
-      def initialize(*labels)
-        @labels = Labels.new(labels)
-      end
+    class Path < Labels
 
       def realm
-        labels.first
-      end
-
-      def to_s
-        labels.to_s
-      end
-
-      def to_a
-        labels.to_a
+        values.first
       end
 
       def to_hash(options = {})
-        labels.to_hash({:name => 'label'}.merge(options))
+        super({:name => 'label'}.merge(options))
       end
 
       def valid?
-        !labels.empty? && labels.none? {|label| label[/[^a-z0-9\._-]/] }
+        !values.empty? && values.none? {|label| label[/[^a-z0-9\._-]/] }
       end
 
     end

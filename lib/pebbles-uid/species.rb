@@ -1,28 +1,19 @@
 module Pebbles
   class Uid
-    class Species
-
-      attr_reader :labels
-      def initialize(*labels)
-        @labels = Labels.new(labels)
-      end
+    class Species < Labels
 
       def genus
-        return if labels.size == 1
+        return if size == 1
 
-        labels.tail.join('.')
+        tail.join('.')
       end
 
       def valid?
-        labels.select {|label| label[/[^a-z0-9\._-]/]}.empty?
+        values.select {|value| value[/[^a-z0-9\._-]/]}.empty?
       end
 
       def to_hash(options = {})
-        labels.to_hash({:verbose => false, :name => 'species'}.merge(options))
-      end
-
-      def to_s
-        labels.to_s
+        super({:verbose => false, :name => 'species'}.merge(options))
       end
 
     end
