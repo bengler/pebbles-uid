@@ -15,6 +15,10 @@ module Pebbles
         @suffix = options.fetch(:suffix) { nil }
         @verbose = options.fetch(:verbose) { true }
         @stop = options.fetch(:stop) { NO_MARKER }
+        if values.last == '*'
+          @stop = NO_MARKER
+          @values.pop
+        end
       end
 
       alias :verbose? :verbose
@@ -32,8 +36,21 @@ module Pebbles
       end
 
       def labelize
+
+        optional_part = false
+        labels = values.map do |label|
+          if label =~ /^\^/
+            label.gsub!(/^\^/, '')
+            optional_part = true
+          end
+
+          result = label.include?('|') ? label.split('|') : label
+          result = [result, nil].flatten if optional_part
+          result
+        end
+
         collection = {}
-        values.each_with_index do |value, i|
+        labels.each_with_index do |value, i|
           collection[label(i)] = value
         end
         collection
