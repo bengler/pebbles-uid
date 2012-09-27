@@ -22,4 +22,12 @@ describe Pebbles::Uid::Labels do
     it { Pebbles::Uid::Labels.new(['a', 'b', 'c']).to_s.should eq('a.b.c') }
   end
 
+  # Not certain where I want to deal with invalid wildcard paths yet.
+  context "wildcards" do
+    specify { Pebbles::Uid::Labels.new('a.*').wildcard?.should == true }
+    specify { Pebbles::Uid::Labels.new('a.b|c').wildcard?.should == true }
+    specify { Pebbles::Uid::Labels.new('a.^b.c').wildcard?.should == true }
+  end
+
+
 end

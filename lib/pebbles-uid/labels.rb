@@ -28,6 +28,10 @@ module Pebbles
         values.empty?
       end
 
+      def wildcard?
+        !!(value =~ /[\*\|\^]/)
+      end
+
       def to_hash(options = {})
         Conditions.new(values, options).to_hash
       end

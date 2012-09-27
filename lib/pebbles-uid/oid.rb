@@ -3,12 +3,12 @@ module Pebbles
 
     class Oid < Labels
 
-      def wildcard?
-        values.first == '*'
+      def empty?
+        value.empty?
       end
 
-      def empty?
-        values.first.nil?
+      def wildcard?
+        value == '*' || !!(value =~ /[\|]/)
       end
 
       def to_hash(options = {})

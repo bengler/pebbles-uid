@@ -24,4 +24,5 @@ describe Pebbles::Uid::Species do
   end
 
   it { Pebbles::Uid::Species.new('unicorn.horn').genus.should eq('horn') }
+
 end

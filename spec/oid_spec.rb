@@ -4,9 +4,9 @@ require 'pebbles-uid/oid'
 describe Pebbles::Uid::Oid do
 
   describe "wildcard" do
-    subject { Pebbles::Uid::Oid.new('*') }
-
-    its(:wildcard?) { should be_true }
+    specify { Pebbles::Uid::Oid.new('*').wildcard?.should == true }
+    specify { Pebbles::Uid::Oid.new('star*star').wildcard?.should == false }
+    specify { Pebbles::Uid::Oid.new('abc|xyz').wildcard?.should == true }
   end
 
 end
