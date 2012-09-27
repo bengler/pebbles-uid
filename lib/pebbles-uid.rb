@@ -1,6 +1,5 @@
 require "pebbles-uid/version"
 
-require "pebbles-uid/parse"
 require "pebbles-uid/conditions"
 require "pebbles-uid/labels"
 require "pebbles-uid/species"
@@ -13,7 +12,7 @@ module Pebbles
     class WildcardUidError < RuntimeError; end
 
     def initialize(s)
-      species, path, oid = self.class.parse(s)
+      /^(?<species>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
       @species = Species.new(species)
       @path = Path.new(path)
       @oid = Oid.new(oid)
