@@ -7,6 +7,10 @@ module Pebbles
         true
       end
 
+      def wildcard?
+        values.first == '*'
+      end
+
       def empty?
         values.first.nil?
       end
