@@ -22,7 +22,7 @@ module Pebbles
     end
 
     def valid_path?
-      !@path.values.empty? && @path.values.none? {|label| label[/[^a-z0-9\._-]/] }
+      !@path.values.empty? && @path.values.none? {|value| value[/[^a-z0-9\._-]/] }
     end
 
     def to_s
