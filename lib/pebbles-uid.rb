@@ -10,11 +10,14 @@ require "pebbles-uid/oid"
 module Pebbles
   class Uid
 
+    class WildcardUidError < RuntimeError; end
+
     def initialize(s)
       species, path, oid = self.class.parse(s)
       @species = Species.new(species)
       @path = Path.new(path)
       @oid = Oid.new(oid)
+      raise WildcardUidError.new if wildcard?
     end
 
     def valid?
@@ -81,6 +84,12 @@ module Pebbles
       label = options.delete(:oid)
       options = options.merge(:name => label) if label
       result = result.merge @oid.to_hash(options)
+    end
+
+    private
+
+    def wildcard?
+      @species.wildcard? || @path.wildcard? || @oid.wildcard?
     end
 
   end

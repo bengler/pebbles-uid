@@ -85,7 +85,7 @@ describe Pebbles::Uid do
       end
     end
 
-    %w(* ! % { ? $).each do |char|
+    %w(! % { ? $).each do |char|
       it "rejects #{char}" do
         Pebbles::Uid.new("uni#{char}corn:mythical$1").valid_species?.should == false
       end
@@ -103,6 +103,12 @@ describe Pebbles::Uid do
 
     it "is a black box" do
       Pebbles::Uid.new("beast:mythical$holy+%^&*s!").valid_oid?.should == true
+    end
+  end
+
+  context "wildcard" do
+    it "doesn't allow wildcard species" do
+      ->{ Pebbles::Uid.new("*:mythical$1") }.should raise_error(Pebbles::Uid::WildcardUidError)
     end
   end
 end
