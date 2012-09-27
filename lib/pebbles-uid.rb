@@ -1,5 +1,6 @@
 require "pebbles-uid/version"
 
+require "pebbles-uid/parse"
 require "pebbles-uid/conditions"
 require "pebbles-uid/labels"
 require "pebbles-uid/species"
@@ -10,7 +11,7 @@ module Pebbles
   class Uid
 
     def initialize(s)
-      /^(?<species>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
+      species, path, oid = self.class.parse(s)
       @species = Species.new(species)
       @path = Path.new(path)
       @oid = Oid.new(oid)
