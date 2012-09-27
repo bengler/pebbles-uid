@@ -3,10 +3,6 @@ module Pebbles
 
     class Oid < Labels
 
-      def valid?
-        true
-      end
-
       def wildcard?
         values.first == '*'
       end

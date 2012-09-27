@@ -18,11 +18,19 @@ module Pebbles
     end
 
     def valid?
-      @species.valid? && valid_path? && @oid.valid?
+      valid_species? && valid_path? && valid_oid?
+    end
+
+    def valid_species?
+      @species.values.select {|value| value[/[^a-z0-9\._-]/]}.empty?
     end
 
     def valid_path?
       !@path.values.empty? && @path.values.none? {|value| value[/[^a-z0-9\._-]/] }
+    end
+
+    def valid_oid?
+      true
     end
 
     def to_s

@@ -8,10 +8,6 @@ module Pebbles
         tail.join('.')
       end
 
-      def valid?
-        values.select {|value| value[/[^a-z0-9\._-]/]}.empty?
-      end
-
       def to_hash(options = {})
         super({:verbose => false, :name => 'species'}.merge(options))
       end
