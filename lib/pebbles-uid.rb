@@ -71,24 +71,21 @@ module Pebbles
     end
 
     def to_hash(options = {})
-      result = {}
-      label = options.delete(:species)
-      options = options.merge(:name => label) if label
-      result = result.merge @species.to_hash(options)
-
-      label = options.delete(:path)
-      options = options.merge(:name => label) if label
-      result = result.merge @path.to_hash(options)
-
-      label = options.delete(:oid)
-      options = options.merge(:name => label) if label
-      result = result.merge @oid.to_hash(options)
+      result = hashify(:species, options)
+      result.merge! hashify(:path, options)
+      result.merge! hashify(:oid, options)
     end
 
     private
 
     def wildcard?
       @species.wildcard? || @path.wildcard? || @oid.wildcard?
+    end
+
+    def hashify(key, options)
+      label = options.delete(key)
+      options = options.merge(:name => label) if label
+      instance_variable_get(:"@#{key}").to_hash(options)
     end
 
   end
