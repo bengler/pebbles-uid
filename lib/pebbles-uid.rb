@@ -11,8 +11,29 @@ module Pebbles
 
     class WildcardUidError < RuntimeError; end
 
+    class << self
+
+      def parse(s)
+        /^(?<species>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
+        [species, path, oid]
+      end
+
+      def species(s)
+        parse(s)[0]
+      end
+
+      def path(s)
+        parse(s)[1]
+      end
+
+      def oid(s)
+        parse(s)[2]
+      end
+
+    end
+
     def initialize(s)
-      /^(?<species>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
+      species, path, oid = self.class.parse(s)
       @species = Species.new(species)
       @path = Path.new(path)
       @oid = Oid.new(oid)

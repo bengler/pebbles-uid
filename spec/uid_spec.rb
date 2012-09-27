@@ -18,6 +18,12 @@ describe Pebbles::Uid do
 
   its(:valid?) { should be_true }
 
+  describe "extracting single elements" do
+    specify { Pebbles::Uid.oid(uid).should eq('1234') }
+    specify { Pebbles::Uid.path(uid).should eq('tourism.norway.fjords') }
+    specify { Pebbles::Uid.species(uid).should eq('post.card') }
+  end
+
   specify ":to_hash creates reasonable query params (e.g. for active record)" do
     expected = {
       'species' => 'post.card',
