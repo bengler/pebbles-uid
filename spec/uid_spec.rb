@@ -64,4 +64,17 @@ describe Pebbles::Uid do
 
   end
 
+  ["abc123", "abc.123", "abc.de-f.123"].each do |path|
+    specify "#{path} is a valid path" do
+      Pebbles::Uid.new("beast:#{path}$1").valid_path?.should == true
+    end
+  end
+
+  ["", ".", "..", "abc!"].each do |path|
+    specify "#{path} is not a valid path" do
+      Pebbles::Uid.new("beast:#{path}$1").valid_path?.should == false
+    end
+  end
+
+
 end

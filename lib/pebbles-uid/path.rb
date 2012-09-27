@@ -10,10 +10,6 @@ module Pebbles
         super({:name => 'path'}.merge(options))
       end
 
-      def valid?
-        !values.empty? && values.none? {|label| label[/[^a-z0-9\._-]/] }
-      end
-
     end
   end
 end
