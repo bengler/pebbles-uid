@@ -1,7 +1,6 @@
 require "pebbles-uid/version"
 
 require 'pebbles-uid/query'
-require 'pebbles-uid/cached_query'
 require "pebbles-uid/conditions"
 require "pebbles-uid/labels"
 require "pebbles-uid/species"

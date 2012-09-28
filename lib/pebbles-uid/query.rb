@@ -1,6 +1,7 @@
 module Pebbles
   class Uid
     class Query
+      class InvalidCacheQuery < RuntimeError; end
 
       attr_reader :species, :path, :oid
       def initialize(s)
@@ -30,6 +31,20 @@ module Pebbles
       def specific?
         false
       end
+
+      def try_cache?
+        return false unless species? && path_labels.realm? && oid?
+        true
+      end
+
+      def cache_keys
+        raise InvalidCacheQuery unless try_cache?
+
+        oid.split('|').map do |id|
+          "#{species}:#{path_labels.realm}$#{id}"
+        end
+      end
+
 
       private
 
