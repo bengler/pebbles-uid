@@ -4,7 +4,7 @@ module Pebbles
 
       attr_reader :values, :prefix
       def initialize(*values)
-        @values = values.flatten.map {|v| v.split('.') }.flatten
+        @values = values.flatten.compact.map {|v| v.split('.') }.flatten
       end
 
       def tail

@@ -1,6 +1,7 @@
 require "pebbles-uid/version"
 
 require 'pebbles-uid/query'
+require 'pebbles-uid/cached_query'
 require "pebbles-uid/conditions"
 require "pebbles-uid/labels"
 require "pebbles-uid/species"
@@ -18,7 +19,7 @@ module Pebbles
 
       def parse(s)
         /^(?<species>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
-        [species, path, oid]
+        [species, path, oid.empty? ? nil : oid]
       end
 
       def species(s)
@@ -33,16 +34,25 @@ module Pebbles
         parse(s)[2]
       end
 
+      def valid_path?(path)
+        return false if path.empty?
+        Path.new(path).valid_with?(/^[a-z0-9_-]+$/)
+      end
     end
 
     attr_reader :species, :path, :oid
     def initialize(s)
       @species, @path, @oid = self.class.parse(s)
-      @oid = nil if @oid && @oid.empty?
+      if species.empty?
+        raise ArgumentError.new("Invalid Uid: #{s}. Species is required.")
+      end
+      if path.empty?
+        raise ArgumentError.new("Invalid Uid: #{s}. Realm is required.")
+      end
     end
 
     def realm
-      @realm ||= path_labels.realm
+      @realm ||= path.split('.').first
     end
 
     def genus
@@ -66,11 +76,16 @@ module Pebbles
     end
 
     def valid_path?
-      path_labels.valid_with?(/^[a-z0-9_-]+$/)
+      self.class.valid_path?(path)
     end
 
     def valid_oid?
-      true
+      return true unless oid?
+      oid.split('|').size == 1
+    end
+
+    def oid?
+      !!oid
     end
 
     def to_s
@@ -84,7 +99,7 @@ module Pebbles
     end
 
     def cache_key
-      "#{species}:*$#{oid}"
+      "#{species}:#{realm}$#{oid}"
     end
   end
 end

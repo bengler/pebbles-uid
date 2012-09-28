@@ -8,6 +8,10 @@ describe Pebbles::Uid do
     specify { Pebbles::Uid.oid(uid).should eq('1234') }
     specify { Pebbles::Uid.path(uid).should eq('tourism.norway.fjords') }
     specify { Pebbles::Uid.species(uid).should eq('post.card') }
+
+    describe "with missing oid" do
+      specify { Pebbles::Uid.oid('post:a.b.c').should eq(nil) }
+    end
   end
 
   describe "query" do
@@ -15,6 +19,20 @@ describe Pebbles::Uid do
       query = Pebbles::Uid.query(uid)
       query.class.should eq(Pebbles::Uid::Query)
       query.to_s.should eq(uid)
+    end
+  end
+
+  describe "requirements" do
+    it "must have a species" do
+      ->{ Pebbles::Uid.new(':tourism.norway$1') }.should raise_error(ArgumentError)
+    end
+
+    it "must have a realm" do
+      ->{ Pebbles::Uid.new('post.card:$1') }.should raise_error(ArgumentError)
+    end
+
+    it "can skip the oid" do
+      ->{ Pebbles::Uid.new('post.card:tourism.norway') }.should_not raise_error
     end
   end
 
@@ -27,8 +45,9 @@ describe Pebbles::Uid do
   its(:genus) { should eq('card') }
   its(:path) { should eq('tourism.norway.fjords') }
   its(:oid) { should eq('1234') }
+  its(:oid?) { should == true }
 
-  its(:cache_key) { should eq('post.card:*$1234') }
+  its(:cache_key) { should eq('post.card:tourism$1234') }
 
   context "when pending creation" do
 
@@ -44,13 +63,13 @@ describe Pebbles::Uid do
   context "paths" do
     ["abc123", "abc.123", "abc.de-f.123"].each do |path|
       specify "#{path} is a valid path" do
-        Pebbles::Uid.new("beast:#{path}$1").valid_path?.should == true
+        Pebbles::Uid.valid_path?(path).should == true
       end
     end
 
     ["", ".", "..", "abc!"].each do |path|
       specify "#{path} is not a valid path" do
-        Pebbles::Uid.new("beast:#{path}$1").valid_path?.should == false
+        Pebbles::Uid.valid_path?(path).should == false
       end
     end
   end
@@ -70,6 +89,14 @@ describe Pebbles::Uid do
   end
 
   context "oids" do
+    it "can be empty" do
+      Pebbles::Uid.new("beast:mythical").oid?.should == false
+    end
+
+    it "cannot contain pipes" do
+      Pebbles::Uid.new("beast:mythical$abc|xyz").valid_oid?.should == false
+    end
+
     it "can be empty" do
       Pebbles::Uid.new("beast:mythical").valid_oid?.should == true
     end
