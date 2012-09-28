@@ -25,18 +25,25 @@ describe Pebbles::Uid::Query do
   context "a species" do
     subject { Pebbles::Uid::Query.new('beast:*$*') }
     its(:species?) { should == true }
+    its(:species) { should eq('beast') }
   end
 
   context "one oid" do
     subject { Pebbles::Uid::Query.new('*:$yak') }
     its(:oid?) { should == true }
+    its(:oid) { should == 'yak' }
   end
 
   context "several oids" do
     subject { Pebbles::Uid::Query.new('*:$yak|unicorn') }
     its(:oid?) { should == true }
+    its(:oid) { should eq('yak|unicorn') }
   end
 
-  specify { Pebbles::Uid::Query.new('*:tales.mythical$*').path?.should == true }
+  context "a path" do
+    subject { Pebbles::Uid::Query.new('*:tales.mythical$*') }
+    its(:path?) { should == true }
+    its(:path) { should == 'tales.mythical' }
+  end
 
 end

@@ -2,9 +2,10 @@ module Pebbles
   class Uid
     class Query
 
+      attr_reader :species, :path, :oid
       def initialize(s)
         @query = s
-        species, path, oid = Pebbles::Uid.parse(s)
+        @species, @path, @oid = Pebbles::Uid.parse(s)
         @species_labels = Species.new(species)
         @path_labels = Path.new(path)
         @oid_box = Oid.new(oid)
