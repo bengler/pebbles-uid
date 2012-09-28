@@ -88,7 +88,7 @@ module Pebbles
     end
 
     def cache_key
-      "#{species}:#{realm}$#{oid}"
+      "#{species}:*$#{oid}"
     end
 
     def to_hash(options = {})
