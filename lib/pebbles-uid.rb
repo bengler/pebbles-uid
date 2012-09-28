@@ -9,8 +9,6 @@ require "pebbles-uid/oid"
 module Pebbles
   class Uid
 
-    class WildcardUidError < RuntimeError; end
-
     class << self
 
       def parse(s)
@@ -32,12 +30,26 @@ module Pebbles
 
     end
 
+    attr_reader :species, :path, :oid
     def initialize(s)
-      species, path, oid = self.class.parse(s)
-      @species = Species.new(species)
-      @path = Path.new(path)
-      @oid = Oid.new(oid)
-      raise WildcardUidError.new if wildcard?
+      @species, @path, @oid = self.class.parse(s)
+      @oid = nil if @oid && @oid.empty?
+    end
+
+    def realm
+      @realm ||= path_labels.realm
+    end
+
+    def genus
+      @genus ||= species_labels.genus
+    end
+
+    def path_labels
+      @path_labels ||= Path.new(path)
+    end
+
+    def species_labels
+      @species_labels ||= Species.new(species)
     end
 
     def valid?
@@ -45,11 +57,11 @@ module Pebbles
     end
 
     def valid_species?
-      @species.values.select {|value| value[/[^a-z0-9\._-]/]}.empty?
+      species_labels.valid_with?(/[^a-z0-9_-]/)
     end
 
     def valid_path?
-      !@path.values.empty? && @path.values.none? {|value| value[/[^a-z0-9\._-]/] }
+      path_labels.valid_with?(/[^a-z0-9_-]/)
     end
 
     def valid_oid?
@@ -57,9 +69,8 @@ module Pebbles
     end
 
     def to_s
-      s = @species.to_s
-      s << ":#{@path}"
-      s << "$#{@oid}" unless @oid.empty?
+      s = "#{species}:#{path}"
+      s << "$#{oid}" if oid
       s
     end
 
@@ -67,47 +78,8 @@ module Pebbles
       [species, path, oid].compact
     end
 
-    def realm
-      @path.realm
-    end
-
-    def species
-      @species.to_s
-    end
-
-    def genus
-      @species.genus
-    end
-
-    def path
-      @path.to_s
-    end
-
-    def oid
-      @oid.empty? ? nil : @oid.to_s
-    end
-
     def cache_key
       "#{species}:*$#{oid}"
     end
-
-    def to_hash(options = {})
-      result = hashify(:species, options)
-      result.merge! hashify(:path, options)
-      result.merge! hashify(:oid, options)
-    end
-
-    private
-
-    def wildcard?
-      @species.wildcard? || @path.wildcard? || @oid.wildcard?
-    end
-
-    def hashify(key, options)
-      label = options.delete(key)
-      options = options.merge(:name => label) if label
-      instance_variable_get(:"@#{key}").to_hash(options)
-    end
-
   end
 end

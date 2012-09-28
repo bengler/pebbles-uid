@@ -29,5 +29,7 @@ describe Pebbles::Uid::Labels do
     specify { Pebbles::Uid::Labels.new('a.^b.c').wildcard?.should == true }
   end
 
+  it "validates against a regex" do
+  end
 
 end
