@@ -10,6 +10,14 @@ describe Pebbles::Uid do
     specify { Pebbles::Uid.species(uid).should eq('post.card') }
   end
 
+  describe "query" do
+    it "returns a query object" do
+      query = Pebbles::Uid.query(uid)
+      query.class.should eq(Pebbles::Uid::Query)
+      query.to_s.should eq(uid)
+    end
+  end
+
   subject { Pebbles::Uid.new(uid) }
   its(:to_s) { should eq(uid) }
   its(:parsed) { should eq(['post.card', 'tourism.norway.fjords', '1234']) }
