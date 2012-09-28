@@ -11,8 +11,8 @@ module Pebbles
         values[1..-1]
       end
 
-      def valid_with?(exclusion_pattern)
-        !empty? && values.none? {|value| value[/[^a-z0-9_-]/] }
+      def valid_with?(pattern)
+        !empty? && values.all? {|value| value[pattern] }
       end
 
       def size

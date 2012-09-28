@@ -62,11 +62,11 @@ module Pebbles
     end
 
     def valid_species?
-      species_labels.valid_with?(/[^a-z0-9_-]/)
+      species_labels.valid_with?(/^[a-z0-9_-]+$/)
     end
 
     def valid_path?
-      path_labels.valid_with?(/[^a-z0-9_-]/)
+      path_labels.valid_with?(/^[a-z0-9_-]+$/)
     end
 
     def valid_oid?

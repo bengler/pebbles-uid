@@ -29,7 +29,9 @@ describe Pebbles::Uid::Labels do
     specify { Pebbles::Uid::Labels.new('a.^b.c').wildcard?.should == true }
   end
 
-  it "validates against a regex" do
+  context "validation" do
+    it { subject.valid_with?(/[0-9]/).should == false }
+    it { subject.valid_with?(/[a-z]/).should == true }
   end
 
 end
