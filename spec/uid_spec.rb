@@ -34,6 +34,22 @@ describe Pebbles::Uid do
     it "can skip the oid" do
       ->{ Pebbles::Uid.new('post.card:tourism.norway') }.should_not raise_error
     end
+
+    it "doesn't accept wildcard species" do
+      ->{ Pebbles::Uid.new('post.*:tourism$1') }.should raise_error(ArgumentError)
+      ->{ Pebbles::Uid.new('post|card:tourism$1') }.should raise_error(ArgumentError)
+      ->{ Pebbles::Uid.new('post.^b.c:tourism$1') }.should raise_error(ArgumentError)
+    end
+
+    it "doesn't accept wildcard paths" do
+      ->{ Pebbles::Uid.new('post:tourism.*$1') }.should raise_error(ArgumentError)
+      ->{ Pebbles::Uid.new('post:tourism|blogging$1') }.should raise_error(ArgumentError)
+      ->{ Pebbles::Uid.new('post:tourism.^b.c$1') }.should raise_error(ArgumentError)
+    end
+
+    it "doesn't accept wildcard oid" do
+      ->{ Pebbles::Uid.new('post:tourism$*') }.should raise_error(ArgumentError)
+    end
   end
 
   subject { Pebbles::Uid.new(uid) }
@@ -83,7 +99,7 @@ describe Pebbles::Uid do
 
     %w(! % { ? $).each do |char|
       it "rejects #{char}" do
-        Pebbles::Uid.new("uni#{char}corn:mythical$1").valid_species?.should == false
+        ->{ Pebbles::Uid.new("uni#{char}corn:mythical$1") }.should raise_error(ArgumentError)
       end
     end
   end

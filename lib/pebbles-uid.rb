@@ -42,6 +42,17 @@ module Pebbles
     attr_reader :species, :path, :oid
     def initialize(s)
       @species, @path, @oid = self.class.parse(s)
+      unless valid_species?
+        raise ArgumentError.new("Invalid Uid: #{s}. Species is invalid.")
+      end
+      unless valid_path?
+        raise ArgumentError.new("Invalid Uid: #{s}. Path is invalid.")
+      end
+
+      if oid == '*'
+        raise ArgumentError.new("Invalid Uid: #{s}. Cannot have wildcard oid.")
+      end
+
       if species.empty?
         raise ArgumentError.new("Invalid Uid: #{s}. Species is required.")
       end

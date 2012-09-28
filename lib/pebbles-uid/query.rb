@@ -3,18 +3,21 @@ module Pebbles
     class Query
       class InvalidCacheQuery < RuntimeError; end
 
-      attr_reader :species, :path, :oid
+      attr_reader :species, :path, :oid, :query
       def initialize(s)
         @query = s
+        if query =~ /\,/
+          # NOTE: Comma-separated lists are deprecated.
+          # These should all be specific uids.
+          # Get the Uid class to blow up if they're not.
+          query.split(',').each { |q| Uid.new(q) }
+        end
         @species, @path, @oid = Pebbles::Uid.parse(s)
         @species_labels = Species.new(species)
         @path_labels = Path.new(path)
         @oid_box = Oid.new(oid)
       end
-
-      def to_s
-        @query
-      end
+      alias :to_s :query
 
       def species?
         !(species_labels.empty? || species_labels.value == '*')
@@ -40,8 +43,15 @@ module Pebbles
       def cache_keys
         raise InvalidCacheQuery unless try_cache?
 
-        oid.split('|').map do |id|
-          "#{species}:#{path_labels.realm}$#{id}"
+        if query =~ /\,/
+          # Deprecated
+          query.split(',').map do |uid|
+            Pebbles::Uid.new(uid).cache_key
+          end
+        else
+          oid.split('|').map do |id|
+            "#{species}:#{path_labels.realm}$#{id}"
+          end
         end
       end
 
