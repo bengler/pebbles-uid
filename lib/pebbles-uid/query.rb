@@ -46,6 +46,10 @@ module Pebbles
         !!@oid && @oid != '*'
       end
 
+      def cache_keys
+        terms.map { |t| Pebbles::Uid.cache_key(t) }
+      end
+
       private
 
       def wildcard_query?
