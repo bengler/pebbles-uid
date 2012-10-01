@@ -16,9 +16,9 @@ describe Pebbles::Uid do
 
   describe "query" do
     it "returns a query object" do
-      query = Pebbles::Uid.query(uid)
-      query.class.should eq(Pebbles::Uid::Query)
-      query.to_s.should eq(uid)
+      s = 'post:tourism.*$*'
+      Pebbles::Uid::Query.should_receive(:new).with s
+      query = Pebbles::Uid.query(s)
     end
   end
 
@@ -28,11 +28,11 @@ describe Pebbles::Uid do
     end
 
     it "must have a realm" do
-      ->{ Pebbles::Uid.new('post.card:$1') }.should raise_error(ArgumentError)
+      ->{ Pebbles::Uid.new('post:$1') }.should raise_error(ArgumentError)
     end
 
     it "can skip the oid" do
-      ->{ Pebbles::Uid.new('post.card:tourism.norway') }.should_not raise_error
+      ->{ Pebbles::Uid.new('post:tourism') }.should_not raise_error
     end
 
     it "doesn't accept wildcard species" do
@@ -53,9 +53,8 @@ describe Pebbles::Uid do
   end
 
   subject { Pebbles::Uid.new(uid) }
-  its(:to_s) { should eq(uid) }
-  its(:parsed) { should eq(['post.card', 'tourism.norway.fjords', '1234']) }
 
+  its(:to_s) { should eq(uid) }
   its(:realm) { should eq('tourism') }
   its(:species) { should eq('post.card') }
   its(:genus) { should eq('card') }
@@ -71,7 +70,6 @@ describe Pebbles::Uid do
     subject { Pebbles::Uid.new(uid) }
 
     its(:to_s) { should eq(uid) }
-    its(:parsed) { should eq(['post.doc', 'universities.europe.norway']) }
     its(:oid) { should be_nil }
 
   end
@@ -93,7 +91,7 @@ describe Pebbles::Uid do
   context "species" do
     %w(- . _ 8).each do |char|
       it "accepts #{char} in a species" do
-        Pebbles::Uid.new("uni#{char}corn:mythical$1").valid_species?.should == true
+        Pebbles::Uid.valid_species?("uni#{char}corn").should == true
       end
     end
 
@@ -110,19 +108,23 @@ describe Pebbles::Uid do
     end
 
     it "cannot contain pipes" do
-      Pebbles::Uid.new("beast:mythical$abc|xyz").valid_oid?.should == false
+      Pebbles::Uid.valid_oid?("abc|xyz").should == false
+    end
+
+    it "cannot contain commas, either" do
+      Pebbles::Uid.valid_oid?("abc,xyz").should == false
     end
 
     it "can be empty" do
-      Pebbles::Uid.new("beast:mythical").valid_oid?.should == true
+      Pebbles::Uid.valid_oid?(nil).should == true
     end
 
     it "can be an empty string" do
-      Pebbles::Uid.new("beast:mythical$").valid_oid?.should == true
+      Pebbles::Uid.valid_oid?("").should == true
     end
 
     it "is a black box" do
-      Pebbles::Uid.new("beast:mythical$holy+%^&*s!").valid_oid?.should == true
+      Pebbles::Uid.valid_oid?("holy+%^&*s!").should == true
     end
   end
 end

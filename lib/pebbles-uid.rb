@@ -37,6 +37,16 @@ module Pebbles
         return false if path.empty?
         Path.new(path).valid_with?(/^[a-z0-9_-]+$/)
       end
+
+      def valid_species?(species)
+        return false if species.empty?
+        Species.new(species).valid_with?(/^[a-z0-9_-]+$/)
+      end
+
+      def valid_oid?(oid)
+        return true if !oid || oid.empty?
+        !!(oid =~ /^[^,|]+$/)
+      end
     end
 
     attr_reader :species, :path, :oid
@@ -82,7 +92,7 @@ module Pebbles
     end
 
     def valid_species?
-      species_labels.valid_with?(/^[a-z0-9_-]+$/)
+      self.class.valid_species?(species)
     end
 
     def valid_path?
@@ -90,8 +100,7 @@ module Pebbles
     end
 
     def valid_oid?
-      return true unless oid?
-      oid.split('|').size == 1
+      self.class.valid_oid?(oid)
     end
 
     def oid?
