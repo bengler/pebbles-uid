@@ -47,6 +47,11 @@ module Pebbles
         return true if !oid || oid.empty?
         !!(oid =~ /^[^,|]+$/)
       end
+
+      def cache_key(uid)
+        species, path, oid = parse(uid)
+        "#{species}:#{Path.new(path).realm}$#{oid}"
+      end
     end
 
     attr_reader :species, :path, :oid
