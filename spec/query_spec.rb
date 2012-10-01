@@ -11,7 +11,7 @@ describe Pebbles::Uid::Query do
     its(:for_one?) { should == true }
     its(:list?) { should == false }
     its(:collection?) { should == false }
-    its(:cache_keys) { should eq(['post:area51$abc']) }
+    its(:cache_keys) { should eq(['post:area51.*$abc']) }
 
     it "handles a wildcard path if realm is given" do
       query = Pebbles::Uid::Query.new('post:area51.*$abc')
@@ -37,7 +37,7 @@ describe Pebbles::Uid::Query do
     its(:list?) { should == true }
     its(:collection?) { should == false }
 
-    its(:cache_keys) { should eq(['post:area51$abc', 'post:area51$xyz']) }
+    its(:cache_keys) { should eq(['post:area51.*$abc', 'post:area51.*$xyz']) }
 
     it "handles a pipe-delimited list of oids" do
       query = Pebbles::Uid::Query.new("post:area51$abc|xyz")
@@ -47,7 +47,7 @@ describe Pebbles::Uid::Query do
     it "ignores crazy wildcard stuff in the path" do
       query = Pebbles::Uid::Query.new("post:area51.^a.b.c.*|d$abc|xyz")
       query.list?.should == true
-      query.cache_keys.should eq(['post:area51$abc', 'post:area51$xyz'])
+      query.cache_keys.should eq(['post:area51.*$abc', 'post:area51.*$xyz'])
     end
 
     it "bails without realm" do

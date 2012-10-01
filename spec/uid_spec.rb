@@ -62,7 +62,7 @@ describe Pebbles::Uid do
   its(:oid) { should eq('1234') }
   its(:oid?) { should == true }
 
-  its(:cache_key) { should eq('post.card:tourism$1234') }
+  its(:cache_key) { should eq('post.card:tourism.*$1234') }
 
   context "when pending creation" do
 

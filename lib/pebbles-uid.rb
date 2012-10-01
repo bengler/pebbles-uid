@@ -50,7 +50,7 @@ module Pebbles
 
       def cache_key(uid)
         species, path, oid = parse(uid)
-        "#{species}:#{Path.new(path).realm}$#{oid}"
+        "#{species}:#{Path.new(path).realm}.*$#{oid}"
       end
     end
 
@@ -123,7 +123,7 @@ module Pebbles
     end
 
     def cache_key
-      "#{species}:#{realm}$#{oid}"
+      "#{species}:#{realm}.*$#{oid}"
     end
   end
 end
