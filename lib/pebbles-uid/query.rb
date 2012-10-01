@@ -8,6 +8,8 @@ module Pebbles
 
         if wildcard_query?
           @terms = [term]
+          _, path, _ = Pebbles::Uid.parse(term)
+          raise ArgumentError.new('Realm must be specified') unless Path.new(path).realm?
         else
           @terms = extract_terms
         end

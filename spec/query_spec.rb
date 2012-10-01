@@ -82,7 +82,12 @@ describe Pebbles::Uid::Query do
       Pebbles::Uid::Query.new('post:area51').collection?.should == true
     end
 
+    it "bails without realm" do
+      ->{ Pebbles::Uid::Query.new('post:*') }.should raise_error(ArgumentError)
+    end
+
     it "does all sorts of crazy-complicated wildcard stuff"
+
   end
 
 end
