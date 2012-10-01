@@ -2,14 +2,13 @@ module Pebbles
   class Uid
     class Query
 
-      attr_reader :term, :terms
+      attr_reader :term, :terms, :species, :path, :oid
       def initialize(term)
         @term = term
 
         if wildcard_query?
           @terms = [term]
-          _, path, _ = Pebbles::Uid.parse(term)
-          raise ArgumentError.new('Realm must be specified') unless Path.new(path).realm?
+          @species, @path, @oid = Pebbles::Uid.parse(term)
         else
           @terms = extract_terms
         end
@@ -27,11 +26,32 @@ module Pebbles
         wildcard_query?
       end
 
+      def path?
+        @path && @path.split('.').reject {|s| s == '*'}.length > 0
+      end
+
+      def species?
+        @species && @species != '*'
+      end
+
+      def genus?
+        !!Species.new(species).genus
+      end
+
+      def genus
+        Species.new(species).genus
+      end
+
+      def oid?
+        !!@oid && @oid != '*'
+      end
+
       private
 
       def wildcard_query?
         return false if term.include?(',')
-        _, _, oid = Pebbles::Uid.parse(term)
+        species, _, oid = Pebbles::Uid.parse(term)
+        return true if Species.new(species).wildcard?
         return true if oid.nil? || oid.empty? || oid == '*'
         false
       end
@@ -59,8 +79,6 @@ module Pebbles
           end
         end.flatten
       end
-
-
 
     end
   end
