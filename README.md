@@ -11,13 +11,18 @@ A valid Uid is in the format `species[.genus]:path[$oid]`.
 The species is one or more dot-delimited labels.
 
 The first label uniquely identifies which pebble the resource originated from.
-Any secondary labels are grouped into a `genus`, which identify sub-types within
-a given pebble.
+
+Any secondary labels are grouped into a `genus`, which identify sub-types within a given pebble.
+
+```
+  post.doc
+```
+
+species is `post`, genus is `doc`
 
 ### Path
 
-The path is a dot-delimited set of labels. The first label represents the realm,
-and is required.
+The path is a dot-delimited set of labels. The first label represents the realm, and is required.
 
 A single resource may have multiple paths (and therefore multiple uids). For example:
 
@@ -33,26 +38,24 @@ The object identifier can be nearly any string, including another uid.
 The oid _MUST_ be unique for any species and realm.
 
 There are currently two characters which cannot be included in an oid:
+
 `|` (pipe) and `,` (comma).
 
-It is optional when creating a new resource.
+Oid is optional when creating a new resource.
 
 ## Queries
 
 ### For one specific resource
 
-Across the pebblestack universe, you can query for a specific resource by
-passing a full Uid.
+Across the pebblestack universe, you can query for a specific resource by passing a full Uid.
 
-In addition, the wildcard query `species:realm.*$oid` will identify a single
-resource, e.g.:
+In addition, the wildcard query `species:realm.*$oid` will identify a single resource, e.g.:
 
     ```
       post.card:tourism.*$42
     ```
 
-If a specific resource is targeted (i.e. species and oid are both unambiguous), then
-realm is required.
+If a specific resource is targeted (i.e. species and oid are both unambiguous), then realm is required.
 
 ### For a collection of resources
 
@@ -70,16 +73,15 @@ This is the equivalent to:
       *:*$*
     ```
 
-Queries may not be made across multiple realms at one time. If realm is not
-specified in the path, then it is assumed that the application verifies realm
-if necessary.
+Queries may not be made across multiple realms at one time. If realm is not specified in the path, then it is assumed that the application verifies realm if necessary.
 
-In the context of a species or a path, you may specify any number of labels and
-terminate with an asterisk, which means: zero or more labels follow. E.g.:
+In the context of a species or a path, you may specify any number of labels and terminate with an asterisk, which means: zero or more labels follow. E.g.:
 
     ```
       post.*:tourism.europe.*
     ```
+
+NOTE: wildcard queries on genus is not yet supported.
 
 This will return things like:
 
@@ -89,11 +91,9 @@ This will return things like:
       post.card:tourism.europe.mountains$345
     ```
 
-Asterisks may not occur in mid-sequence. In other words, `post:tourism.*.food` will
-not be accepted.
+Asterisks may not occur in mid-sequence. In other words, `post:tourism.*.food` will not be accepted.
 
-In the context of an oid, you either know the oid you want, or you don't.  A query
-where oid is not specified at all is equivalent to an oid represented by an asterisk.
+In the context of an oid, you either know the oid you want, or you don't. A query where oid is not specified at all is equivalent to an oid represented by an asterisk.
 
 #### Pipes
 
@@ -129,7 +129,7 @@ If you wish to fetch a specific list of objects, you may use the pipe to delimit
       post:realm.*$a|b|c|d|e|f|g
     ```
 
-This is equivalent to the deprecated comma-delimited uid query:
+This is equivalent to the NOW deprecated comma-delimited uid query:
 
     ```
       post:realm.*$a,post:realm.*$b,post:realm.*$c,post:realm.*$d,post:realm.*$e,post:realm.*$f,post:realm.*$g,
