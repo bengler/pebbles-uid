@@ -2,6 +2,10 @@ module Pebbles
   class Uid
     class Species < Labels
 
+      def ambiguous?
+        value == '*' || values.empty? || wildcard?
+      end
+
       def genus
         return if size == 1
 

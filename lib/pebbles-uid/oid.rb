@@ -3,12 +3,20 @@ module Pebbles
 
     class Oid < Labels
 
+      def ambiguous?
+        value == '*' || value.empty?
+      end
+
       def empty?
         value.empty?
       end
 
+      def multiple?
+        !!(value =~ /[\|]/)
+      end
+
       def wildcard?
-        value == '*' || !!(value =~ /[\|]/)
+        value == '*' || multiple?
       end
 
       def to_hash(options = {})
