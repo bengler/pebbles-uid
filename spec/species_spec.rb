@@ -18,6 +18,11 @@ describe Pebbles::Uid::Species do
     its(:genus) { should eq('dust.sparkles') }
     its(:to_hash) { should eq('species' => 'unicorn.dust.sparkles') }
 
+    it "doesn't have a genus if there's a wildcard" do
+      species = Pebbles::Uid::Species.new('unicorn.*')
+      species.genus?.should == false
+    end
+
     it "can customize the hash" do
       subject.to_hash(:verbose => true).should eq('species_0' => 'unicorn', 'species_1' => 'dust', 'species_2' => 'sparkles')
     end

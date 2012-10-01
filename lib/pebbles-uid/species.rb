@@ -7,9 +7,13 @@ module Pebbles
       end
 
       def genus
-        return if size == 1
+        return if size <= 1
 
         tail.join('.')
+      end
+
+      def genus?
+        genus != '*'
       end
 
       def to_hash(options = {})
