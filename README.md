@@ -150,6 +150,7 @@ In both species and paths, a caret indicates ancestry up to the specified point:
 This represents everything at the following locations:
 
     ```
+      post:realm.europe
       post:realm.europe.norway
       post:realm.europe.norway.fjords
       post:realm.europe.norway.fjords.food
