@@ -51,6 +51,9 @@ resource, e.g.:
       post.card:tourism.*$42
     ```
 
+If a specific resource is targeted (i.e. species and oid are both unambiguous), then
+realm is required.
+
 ### For a collection of resources
 
 #### Asterisks
@@ -67,16 +70,9 @@ This is the equivalent to:
       *:*$*
     ```
 
-Which is equivalent to:
-
-    ```
-      *:realm.*$*
-    ```
-
-Queries may not be made across multiple realms at one time.
-
-_NOTE_: It is possible that this restriction is not currently implemented across
-all applications.
+Queries may not be made across multiple realms at one time. If realm is not
+specified in the path, then it is assumed that the application verifies realm
+if necessary.
 
 In the context of a species or a path, you may specify any number of labels and
 terminate with an asterisk, which means: zero or more labels follow. E.g.:
@@ -106,19 +102,19 @@ A pipe signifies _or_.
 This can be used in species at any position:
 
     ```
-      unit|group:realm.*
+      unit|group:*
     ```
 
     ```
-      post.doc|card:realm.*
+      post.doc|card:*
     ```
 
-In a path, this can be used in any position except the first, as the realm must be specified.
+In a path, this can be used in any position except the first, as the realm must be unambiguous.
 
 Thus:
 
     ```
-      post:realm1|realm.label1|label2.something
+      post:realm.label1|label2.something
     ```
 
 The following is not allowed:
@@ -138,6 +134,8 @@ This is equivalent to the deprecated comma-delimited uid query:
     ```
       post:realm.*$a,post:realm.*$b,post:realm.*$c,post:realm.*$d,post:realm.*$e,post:realm.*$f,post:realm.*$g,
     ```
+
+NOTE: realm is required in this case, because each term in the list must refer to a single resource.
 
 #### Caret
 
