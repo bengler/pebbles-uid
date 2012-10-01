@@ -2,13 +2,13 @@ module Pebbles
   class Uid
     class Query
 
-      attr_reader :term, :terms, :species, :path, :oid
+      attr_reader :term, :terms, :genus, :path, :oid
       def initialize(term)
         @term = term
 
         if wildcard_query?
           @terms = [term]
-          @species, @path, @oid = Pebbles::Uid.parse(term)
+          @genus, @path, @oid = Pebbles::Uid.parse(term)
         else
           @terms = extract_terms
         end
@@ -30,16 +30,16 @@ module Pebbles
         @path && @path.split('.').reject {|s| s == '*'}.length > 0
       end
 
-      def species?
-        @species && @species != '*'
-      end
-
       def genus?
-        !!Species.new(species).genus
+        @genus && @genus != '*'
       end
 
-      def genus
-        Species.new(species).genus
+      def species?
+        !!Genus.new(genus).species
+      end
+
+      def species
+        Genus.new(genus).species
       end
 
       def oid?
@@ -55,7 +55,7 @@ module Pebbles
       def wildcard_query?
         return false if term.include?(',')
         species, _, oid = Pebbles::Uid.parse(term)
-        return true if Species.new(species).wildcard?
+        return true if Genus.new(species).wildcard?
         return true if oid.nil? || oid.empty? || oid == '*'
         false
       end
@@ -63,12 +63,12 @@ module Pebbles
       def extract_terms
         term.split(',').map do |uid|
           species, path, oid = Pebbles::Uid.parse(uid)
-          species_labels = Species.new(species)
+          species_labels = Genus.new(species)
           path_labels = Path.new(path)
           oid_box = Oid.new(oid)
 
           raise ArgumentError.new('Realm must be specified') unless path_labels.realm?
-          raise ArgumentError.new('Species must unambiguous') if species_labels.ambiguous?
+          raise ArgumentError.new('Genus must unambiguous') if species_labels.ambiguous?
           raise ArgumentError.new('Oid must be unambiguous') if oid_box.ambiguous?
 
           @realm ||= path_labels.realm

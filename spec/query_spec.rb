@@ -58,7 +58,7 @@ describe Pebbles::Uid::Query do
       ->{ Pebbles::Uid::Query.new('post:area51$abc,post:area52$xyz') }.should raise_error(ArgumentError)
     end
 
-    it "bails with unspecific species" do
+    it "bails with unspecific genus" do
       ->{ Pebbles::Uid::Query.new('post.*:area51$abc,post:area51$xyz') }.should raise_error(ArgumentError)
     end
 
@@ -86,7 +86,7 @@ describe Pebbles::Uid::Query do
     context "everything" do
       subject { Pebbles::Uid::Query.new('*:*') }
 
-      its(:species?) { should == false }
+      its(:genus?) { should == false }
       its(:path?) { should == false }
       its(:oid?) { should == false }
     end
@@ -94,21 +94,22 @@ describe Pebbles::Uid::Query do
     context "everything, with any oid" do
       subject { Pebbles::Uid::Query.new('*:*$*') }
 
-      its(:species?) { should == false }
+      its(:genus?) { should == false }
       its(:path?) { should == false }
       its(:oid?) { should == false }
     end
 
-    context "a species" do
+    context "a genus" do
       subject { Pebbles::Uid::Query.new('beast:*$*') }
-      its(:species?) { should == true }
-      its(:species) { should eq('beast') }
+      its(:genus?) { should == true }
+      its(:genus) { should eq('beast') }
+      its(:species?) { should == false }
     end
 
-    context "a genus" do
+    context "a species" do
       subject { Pebbles::Uid::Query.new('beast.mythical.hairy:*$*') }
-      its(:genus?) { should == true }
-      its(:genus) { should eq('mythical.hairy') }
+      its(:species?) { should == true }
+      its(:species) { should eq('mythical.hairy') }
     end
 
     context "a path" do

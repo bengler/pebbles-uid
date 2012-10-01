@@ -1,23 +1,23 @@
 module Pebbles
   class Uid
-    class Species < Labels
+    class Genus < Labels
 
       def ambiguous?
         value == '*' || values.empty? || wildcard?
       end
 
-      def genus
+      def species
         return if size <= 1
 
         tail.join('.')
       end
 
-      def genus?
-        genus != '*'
+      def species?
+        species != '*'
       end
 
       def to_hash(options = {})
-        super({:verbose => false, :name => 'species'}.merge(options))
+        super({:verbose => false, :name => 'genus'}.merge(options))
       end
 
     end

@@ -7,7 +7,7 @@ describe Pebbles::Uid do
   describe "extracting single elements" do
     specify { Pebbles::Uid.oid(uid).should eq('1234') }
     specify { Pebbles::Uid.path(uid).should eq('tourism.norway.fjords') }
-    specify { Pebbles::Uid.species(uid).should eq('post.card') }
+    specify { Pebbles::Uid.genus(uid).should eq('post.card') }
 
     describe "with missing oid" do
       specify { Pebbles::Uid.oid('post:a.b.c').should eq(nil) }
@@ -23,7 +23,7 @@ describe Pebbles::Uid do
   end
 
   describe "requirements" do
-    it "must have a species" do
+    it "must have a genus" do
       ->{ Pebbles::Uid.new(':tourism.norway$1') }.should raise_error(ArgumentError)
     end
 
@@ -35,7 +35,7 @@ describe Pebbles::Uid do
       ->{ Pebbles::Uid.new('post:tourism') }.should_not raise_error
     end
 
-    it "doesn't accept wildcard species" do
+    it "doesn't accept wildcard genus" do
       ->{ Pebbles::Uid.new('post.*:tourism$1') }.should raise_error(ArgumentError)
       ->{ Pebbles::Uid.new('post|card:tourism$1') }.should raise_error(ArgumentError)
       ->{ Pebbles::Uid.new('post.^b.c:tourism$1') }.should raise_error(ArgumentError)
@@ -56,8 +56,8 @@ describe Pebbles::Uid do
 
   its(:to_s) { should eq(uid) }
   its(:realm) { should eq('tourism') }
-  its(:species) { should eq('post.card') }
-  its(:genus) { should eq('card') }
+  its(:genus) { should eq('post.card') }
+  its(:species) { should eq('card') }
   its(:path) { should eq('tourism.norway.fjords') }
   its(:oid) { should eq('1234') }
   its(:oid?) { should == true }
@@ -88,10 +88,10 @@ describe Pebbles::Uid do
     end
   end
 
-  context "species" do
+  context "genus" do
     %w(- . _ 8).each do |char|
-      it "accepts #{char} in a species" do
-        Pebbles::Uid.valid_species?("uni#{char}corn").should == true
+      it "accepts #{char} in a genus" do
+        Pebbles::Uid.valid_genus?("uni#{char}corn").should == true
       end
     end
 

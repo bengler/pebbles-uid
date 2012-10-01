@@ -3,7 +3,7 @@ require "pebbles-uid/version"
 require 'pebbles-uid/query'
 require "pebbles-uid/conditions"
 require "pebbles-uid/labels"
-require "pebbles-uid/species"
+require "pebbles-uid/genus"
 require "pebbles-uid/path"
 require "pebbles-uid/oid"
 
@@ -17,11 +17,11 @@ module Pebbles
       end
 
       def parse(s)
-        /^(?<species>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
-        [species, path, oid.empty? ? nil : oid]
+        /^(?<genus>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
+        [genus, path, oid.empty? ? nil : oid]
       end
 
-      def species(s)
+      def genus(s)
         parse(s)[0]
       end
 
@@ -38,9 +38,9 @@ module Pebbles
         Path.new(path).valid_with?(/^[a-z0-9_-]+$/)
       end
 
-      def valid_species?(species)
-        return false if species.empty?
-        Species.new(species).valid_with?(/^[a-z0-9_-]+$/)
+      def valid_genus?(genus)
+        return false if genus.empty?
+        Genus.new(genus).valid_with?(/^[a-z0-9_-]+$/)
       end
 
       def valid_oid?(oid)
@@ -49,16 +49,16 @@ module Pebbles
       end
 
       def cache_key(uid)
-        species, path, oid = parse(uid)
-        "#{species}:#{Path.new(path).realm}.*$#{oid}"
+        genus, path, oid = parse(uid)
+        "#{genus}:#{Path.new(path).realm}.*$#{oid}"
       end
     end
 
-    attr_reader :species, :path, :oid
+    attr_reader :genus, :path, :oid
     def initialize(s)
-      @species, @path, @oid = self.class.parse(s)
-      unless valid_species?
-        raise ArgumentError.new("Invalid Uid: #{s}. Species is invalid.")
+      @genus, @path, @oid = self.class.parse(s)
+      unless valid_genus?
+        raise ArgumentError.new("Invalid Uid: #{s}. Genus is invalid.")
       end
       unless valid_path?
         raise ArgumentError.new("Invalid Uid: #{s}. Path is invalid.")
@@ -68,8 +68,8 @@ module Pebbles
         raise ArgumentError.new("Invalid Uid: #{s}. Cannot have wildcard oid.")
       end
 
-      if species.empty?
-        raise ArgumentError.new("Invalid Uid: #{s}. Species is required.")
+      if genus.empty?
+        raise ArgumentError.new("Invalid Uid: #{s}. Genus is required.")
       end
       if path.empty?
         raise ArgumentError.new("Invalid Uid: #{s}. Realm is required.")
@@ -80,24 +80,24 @@ module Pebbles
       @realm ||= path.split('.').first
     end
 
-    def genus
-      @genus ||= species_labels.genus
+    def species
+      @species ||= genus_labels.species
     end
 
     def path_labels
       @path_labels ||= Path.new(path)
     end
 
-    def species_labels
-      @species_labels ||= Species.new(species)
+    def genus_labels
+      @genus_labels ||= Genus.new(genus)
     end
 
     def valid?
-      valid_species? && valid_path? && valid_oid?
+      valid_genus? && valid_path? && valid_oid?
     end
 
-    def valid_species?
-      self.class.valid_species?(species)
+    def valid_genus?
+      self.class.valid_genus?(genus)
     end
 
     def valid_path?
@@ -113,17 +113,17 @@ module Pebbles
     end
 
     def to_s
-      s = "#{species}:#{path}"
+      s = "#{genus}:#{path}"
       s << "$#{oid}" if oid
       s
     end
 
     def parsed
-      [species, path, oid].compact
+      [genus, path, oid].compact
     end
 
     def cache_key
-      "#{species}:#{realm}.*$#{oid}"
+      "#{genus}:#{realm}.*$#{oid}"
     end
   end
 end
