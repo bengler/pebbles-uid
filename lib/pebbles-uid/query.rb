@@ -35,11 +35,11 @@ module Pebbles
       end
 
       def species?
-        !!Genus.new(genus).species
+        !!genus_wrapper.species
       end
 
       def species
-        Genus.new(genus).species
+        genus_wrapper.species
       end
 
       def oid?
@@ -51,6 +51,10 @@ module Pebbles
       end
 
       private
+
+      def genus_wrapper
+        @genus_wrapper ||= Genus.new(genus)
+      end
 
       def wildcard_query?
         return false if term.include?(',')
