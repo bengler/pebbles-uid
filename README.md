@@ -202,6 +202,29 @@ Or install it yourself as:
     uid.to_hash(:verbose => true, :suffix => 'xyz', :genus => 'klass', :path => 'label' => :oid => 'id')
     => {'klass_0_xyz' => 'post', 'klass_1_xyz' => 'card', 'label_0_xyz' => 'tourism', 'label_1_xyz' => 'norway', 'label_2_xyz' => 'fjords', 'id_xyz' => '1234'}
 
+## TODO
+
+[ ] separate `Uid.parse` into a separate file to test without loading the whole gem
+[ ] work out the `:to_hash` implementation on queries
+[ ] handle caching for path-specific queries(*)
+
+(*) Caching and path-specific queries.
+
+    A realm has multiple publication channels, e.g. nuz.paper, nuz.magazine, and nuz.tv.
+    An article in the realm can be present in one or more of these paths. Assume that in
+    this instance, the article is only in the paper and tv. e.g:
+
+    ```
+    post.article:nuz.paper$123
+    post.article:nuz.tv$123
+    ```
+
+    If you search for post.article:nuz.*$123 then you will find it, but assume for a second
+    that you only want to find things that are in the `nuz.magazine` path. If you search on
+    the cache key, then you will find the `$123` article, but it should not have been returned.
+
+    I don't know what the solution to this is.
+
 ## Contributing
 
 1. Fork it
