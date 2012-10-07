@@ -1,4 +1,10 @@
-require 'pebbles-uid'
+require 'pebbles-uid/parse'
+require 'pebbles-uid/cache_key'
+require 'pebbles-uid/labels'
+require 'pebbles-uid/genus'
+require 'pebbles-uid/path'
+require 'pebbles-uid/oid'
+require 'pebbles-uid/query'
 
 describe Pebbles::Uid::Query do
 

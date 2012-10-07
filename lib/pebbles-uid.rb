@@ -1,5 +1,7 @@
 require "pebbles-uid/version"
 
+require 'pebbles-uid/parse'
+require 'pebbles-uid/cache_key'
 require 'pebbles-uid/query'
 require "pebbles-uid/conditions"
 require "pebbles-uid/labels"
@@ -12,13 +14,13 @@ module Pebbles
 
     class << self
 
-      def query(s)
-        Pebbles::Uid::Query.new(s)
-      end
-
       def parse(s)
         /^(?<genus>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
         [genus, path, oid.empty? ? nil : oid]
+      end
+
+      def query(s)
+        Pebbles::Uid::Query.new(s)
       end
 
       def genus(s)
@@ -46,11 +48,6 @@ module Pebbles
       def valid_oid?(oid)
         return true if !oid || oid.empty?
         !!(oid =~ /^[^,|]+$/)
-      end
-
-      def cache_key(uid)
-        genus, path, oid = parse(uid)
-        "#{genus}:#{Path.new(path).realm}.*$#{oid}"
       end
     end
 
