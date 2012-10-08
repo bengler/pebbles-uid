@@ -204,7 +204,6 @@ Or install it yourself as:
 
 ## TODO
 
-[ ] separate `Uid.parse` into a separate file to test without loading the whole gem
 [ ] work out the `:to_hash` implementation on queries
 [ ] handle caching for path-specific queries(*)
 
