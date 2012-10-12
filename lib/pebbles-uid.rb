@@ -80,11 +80,11 @@ module Pebbles
     end
 
     def path_labels
-      @path_labels ||= Labels.new(path)
+      @path_labels ||= Labels.new(path, :name => 'path')
     end
 
     def genus_labels
-      @genus_labels ||= Labels.new(genus)
+      @genus_labels ||= Labels.new(genus, :name => 'genus')
     end
 
     def valid?
@@ -118,7 +118,7 @@ module Pebbles
     end
 
     def to_hash
-      hash = genus_labels.to_hash(:name => 'genus').merge(path_labels.to_hash(:name => 'path'))
+      hash = genus_labels.to_hash.merge(path_labels.to_hash)
       hash = hash.merge('oid' => oid) if oid?
       hash
     end

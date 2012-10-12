@@ -2,9 +2,12 @@ module Pebbles
   class Uid
     class Labels
 
-      attr_reader :values, :prefix
+      attr_reader :values, :name
       def initialize(*values)
+        options = values.pop if values.last.is_a?(Hash)
+        options ||= {}
         @values = values.flatten.compact.map {|v| v.split('.') }.flatten
+        @name = options[:name]
       end
 
       def first
@@ -45,7 +48,7 @@ module Pebbles
       end
 
       def to_hash(options = {})
-        Conditions.new(values, options).to_hash
+        Conditions.new(values, {:name => name}.merge(options)).to_hash
       end
 
     end

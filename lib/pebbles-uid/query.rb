@@ -55,7 +55,7 @@ module Pebbles
           raise RuntimeError.new('Cannot compute a conditions hash for a list of uids')
         end
 
-        hash = genus_wrapper.to_hash(:name => 'genus').merge(path_wrapper.to_hash(:name => 'path'))
+        hash = genus_wrapper.to_hash.merge(path_wrapper.to_hash)
         hash = hash.merge('oid' => oid) if oid?
         hash
       end
@@ -63,11 +63,11 @@ module Pebbles
       private
 
       def genus_wrapper
-        @genus_wrapper ||= Labels.new(genus)
+        @genus_wrapper ||= Labels.new(genus, :name => 'genus')
       end
 
       def path_wrapper
-        @path_wrapper ||= Labels.new(path)
+        @path_wrapper ||= Labels.new(path, :name => 'path')
       end
 
       def wildcard_query?
