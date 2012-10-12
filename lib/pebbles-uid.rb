@@ -5,8 +5,6 @@ require 'pebbles-uid/cache_key'
 require 'pebbles-uid/query'
 require "pebbles-uid/conditions"
 require "pebbles-uid/labels"
-require "pebbles-uid/genus"
-require "pebbles-uid/path"
 require "pebbles-uid/oid"
 
 module Pebbles
@@ -37,12 +35,12 @@ module Pebbles
 
       def valid_path?(path)
         return false if path.empty?
-        Path.new(path).valid_with?(/^[a-z0-9_-]+$/)
+        Labels.new(path).valid_with?(/^[a-z0-9_-]+$/)
       end
 
       def valid_genus?(genus)
         return false if genus.empty?
-        Genus.new(genus).valid_with?(/^[a-z0-9_-]+$/)
+        Labels.new(genus).valid_with?(/^[a-z0-9_-]+$/)
       end
 
       def valid_oid?(oid)
@@ -78,15 +76,15 @@ module Pebbles
     end
 
     def species
-      @species ||= genus_labels.species
+      @species ||= genus_labels.tail.join('.')
     end
 
     def path_labels
-      @path_labels ||= Path.new(path)
+      @path_labels ||= Labels.new(path)
     end
 
     def genus_labels
-      @genus_labels ||= Genus.new(genus)
+      @genus_labels ||= Labels.new(genus)
     end
 
     def valid?
@@ -122,5 +120,6 @@ module Pebbles
     def cache_key
       "#{genus}:#{realm}.*$#{oid}"
     end
+
   end
 end

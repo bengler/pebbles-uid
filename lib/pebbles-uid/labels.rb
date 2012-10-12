@@ -7,8 +7,16 @@ module Pebbles
         @values = values.flatten.compact.map {|v| v.split('.') }.flatten
       end
 
+      def first
+        values.first
+      end
+
       def tail
         values[1..-1]
+      end
+
+      def ambiguous?
+        value == '*' || values.empty? || wildcard?
       end
 
       def valid_with?(pattern)

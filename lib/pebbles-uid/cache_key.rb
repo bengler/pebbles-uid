@@ -4,7 +4,7 @@ module Pebbles
     class << self
       def cache_key(uid)
         genus, path, oid = parse(uid)
-        "#{genus}:#{Path.new(path).realm}.*$#{oid}"
+        "#{genus}:#{Labels.new(path).first}.*$#{oid}"
       end
     end
 

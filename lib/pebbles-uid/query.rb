@@ -35,11 +35,11 @@ module Pebbles
       end
 
       def species?
-        !!genus_wrapper.species
+        !genus_wrapper.tail.empty?
       end
 
       def species
-        genus_wrapper.species
+        genus_wrapper.tail.join('.')
       end
 
       def oid?
@@ -53,13 +53,13 @@ module Pebbles
       private
 
       def genus_wrapper
-        @genus_wrapper ||= Genus.new(genus)
+        @genus_wrapper ||= Labels.new(genus)
       end
 
       def wildcard_query?
         return false if term.include?(',')
         genus, _, oid = Pebbles::Uid.parse(term)
-        return true if Genus.new(genus).wildcard?
+        return true if Labels.new(genus).wildcard?
         return true if oid.nil? || oid.empty? || oid == '*'
         false
       end
@@ -67,16 +67,16 @@ module Pebbles
       def extract_terms
         term.split(',').map do |uid|
           _genus, _path, _oid = Pebbles::Uid.parse(uid)
-          genus_labels = Genus.new(_genus)
-          path_labels = Path.new(_path)
+          genus_labels = Labels.new(_genus)
+          path_labels = Labels.new(_path)
           oid_box = Oid.new(_oid)
 
-          raise ArgumentError.new('Realm must be specified') unless path_labels.realm?
+          raise ArgumentError.new('Realm must be specified') if path_labels.empty? || path_labels.first == '*'
           raise ArgumentError.new('Genus must unambiguous') if genus_labels.ambiguous?
           raise ArgumentError.new('Oid must be unambiguous') if oid_box.ambiguous?
 
-          @realm ||= path_labels.realm
-          raise ArgumentError.new('One realm at a time, please') if @realm != path_labels.realm
+          @realm ||= path_labels.first
+          raise ArgumentError.new('One realm at a time, please') if @realm != path_labels.first
 
           if oid_box.multiple?
             _oid.split('|').map do |s|
