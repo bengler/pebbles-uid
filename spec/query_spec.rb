@@ -1,6 +1,7 @@
 require 'pebbles-uid/parse'
 require 'pebbles-uid/cache_key'
 require 'pebbles-uid/labels'
+require 'pebbles-uid/conditions'
 require 'pebbles-uid/oid'
 require 'pebbles-uid/query'
 
@@ -43,9 +44,14 @@ describe Pebbles::Uid::Query do
 
     its(:cache_keys) { should eq(['post:area51.*$abc', 'post:area51.*$xyz']) }
 
-    it "handles a pipe-delimited list of oids" do
-      query = Pebbles::Uid::Query.new("post:area51$abc|xyz")
-      query.terms.should eq(['post:area51$abc', 'post:area51$xyz'])
+    context "by oid" do
+      subject { Pebbles::Uid::Query.new("post:area51$abc|xyz") }
+
+      its(:terms) { should eq(['post:area51$abc', 'post:area51$xyz']) }
+
+      it "can't do hashes under these circumstances" do
+        ->{ subject.to_hash }.should raise_error(RuntimeError)
+      end
     end
 
     it "ignores crazy wildcard stuff in the path" do
@@ -93,6 +99,8 @@ describe Pebbles::Uid::Query do
       its(:genus?) { should == false }
       its(:path?) { should == false }
       its(:oid?) { should == false }
+
+      its(:to_hash) { should == {} }
     end
 
     context "everything, with any oid" do
@@ -101,6 +109,7 @@ describe Pebbles::Uid::Query do
       its(:genus?) { should == false }
       its(:path?) { should == false }
       its(:oid?) { should == false }
+      its(:to_hash) { should == {} }
     end
 
     context "a genus" do
@@ -108,23 +117,27 @@ describe Pebbles::Uid::Query do
       its(:genus?) { should == true }
       its(:genus) { should eq('beast') }
       its(:species?) { should == false }
+      its(:to_hash) { should == {'genus_0' => 'beast'} }
     end
 
     context "a species" do
       subject { Pebbles::Uid::Query.new('beast.mythical.hairy:*$*') }
       its(:species?) { should == true }
       its(:species) { should eq('mythical.hairy') }
+      its(:to_hash) { should == {'genus_0' => 'beast', 'genus_1' => 'mythical', 'genus_2' => 'hairy'} }
     end
 
     context "a path" do
       subject { Pebbles::Uid::Query.new('*:area51.*') }
       its(:path?) { should == true }
+      its(:to_hash) { should == {'path_0' => 'area51'} }
     end
 
     context "one oid" do
       subject { Pebbles::Uid::Query.new('*:*$yak') }
       its(:oid?) { should == true }
       its(:oid) { should == 'yak' }
+      its(:to_hash) { should == {'oid' => 'yak'} }
     end
 
   end

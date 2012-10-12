@@ -50,10 +50,24 @@ module Pebbles
         terms.map { |t| Pebbles::Uid.cache_key(t) }
       end
 
+      def to_hash
+        if list?
+          raise RuntimeError.new('Cannot compute a conditions hash for a list of uids')
+        end
+
+        hash = genus_wrapper.to_hash(:name => 'genus').merge(path_wrapper.to_hash(:name => 'path'))
+        hash = hash.merge('oid' => oid) if oid?
+        hash
+      end
+
       private
 
       def genus_wrapper
         @genus_wrapper ||= Labels.new(genus)
+      end
+
+      def path_wrapper
+        @path_wrapper ||= Labels.new(path)
       end
 
       def wildcard_query?

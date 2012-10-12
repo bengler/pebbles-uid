@@ -198,7 +198,6 @@ Or install it yourself as:
 
 ## TODO
 
-[ ] work out the `:to_hash` implementation on queries
 [ ] handle caching for path-specific queries(*)
 
 (*) Caching and path-specific queries.
