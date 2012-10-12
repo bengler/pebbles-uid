@@ -56,7 +56,7 @@ module Pebbles
         end
 
         hash = genus_wrapper.to_hash.merge(path_wrapper.to_hash)
-        hash = hash.merge('oid' => oid) if oid?
+        hash = hash.merge(:oid => oid) if oid?
         hash
       end
 

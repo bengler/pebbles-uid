@@ -117,27 +117,27 @@ describe Pebbles::Uid::Query do
       its(:genus?) { should == true }
       its(:genus) { should eq('beast') }
       its(:species?) { should == false }
-      its(:to_hash) { should == {'genus_0' => 'beast'} }
+      its(:to_hash) { should == {:genus_0 => 'beast'} }
     end
 
     context "a species" do
       subject { Pebbles::Uid::Query.new('beast.mythical.hairy:*$*') }
       its(:species?) { should == true }
       its(:species) { should eq('mythical.hairy') }
-      its(:to_hash) { should == {'genus_0' => 'beast', 'genus_1' => 'mythical', 'genus_2' => 'hairy'} }
+      its(:to_hash) { should == {:genus_0 => 'beast', :genus_1 => 'mythical', :genus_2 => 'hairy'} }
     end
 
     context "a path" do
       subject { Pebbles::Uid::Query.new('*:area51.*') }
       its(:path?) { should == true }
-      its(:to_hash) { should == {'path_0' => 'area51'} }
+      its(:to_hash) { should == {:path_0 => 'area51'} }
     end
 
     context "one oid" do
       subject { Pebbles::Uid::Query.new('*:*$yak') }
       its(:oid?) { should == true }
       its(:oid) { should == 'yak' }
-      its(:to_hash) { should == {'oid' => 'yak'} }
+      its(:to_hash) { should == {:oid => 'yak'} }
     end
 
   end

@@ -6,7 +6,7 @@ describe Pebbles::Uid::Labels do
   subject { Pebbles::Uid::Labels.new('a.b.c', :name => 'thing') }
   its(:to_s) { should eq('a.b.c') }
   its(:to_a) { should eq(%w(a b c)) }
-  its(:to_hash) {  should eq('thing_0' => "a", 'thing_1' => "b", 'thing_2' => "c") }
+  its(:to_hash) {  should eq(:thing_0 => "a", :thing_1 => "b", :thing_2 => "c") }
   its(:tail) { should eq(%w(b c)) }
 
   it "has a size" do

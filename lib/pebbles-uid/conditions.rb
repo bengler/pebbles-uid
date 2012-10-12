@@ -52,7 +52,7 @@ module Pebbles
       end
 
       def label(i = nil)
-        [name, i, suffix].compact.join('_')
+        [name, i, suffix].compact.join('_').to_sym
       end
 
       def stop_label

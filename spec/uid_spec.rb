@@ -129,12 +129,12 @@ describe Pebbles::Uid do
     its(:cache_key) { should eq('post.card:tourism.*$1234') }
 
     its(:to_hash) do
-      should eq('genus_0' => 'post', 'genus_1' => 'card', 'path_0' => 'tourism', 'path_1' => 'norway', 'path_2' => 'fjords', 'oid' => '1234')
+      should eq(:genus_0 => 'post', :genus_1 => 'card', :path_0 => 'tourism', :path_1 => 'norway', :path_2 => 'fjords', :oid => '1234')
     end
 
     context "without an oid" do
       it "excludes the oid key from the hash" do
-        Pebbles::Uid.new('post.doc:a.b.c').to_hash.should eq('genus_0' => 'post', 'genus_1' => 'doc', 'path_0' => 'a', 'path_1' => 'b', 'path_2' => 'c')
+        Pebbles::Uid.new('post.doc:a.b.c').to_hash.should eq(:genus_0 => 'post', :genus_1 => 'doc', :path_0 => 'a', :path_1 => 'b', :path_2 => 'c')
       end
     end
 

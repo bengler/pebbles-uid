@@ -119,7 +119,7 @@ module Pebbles
 
     def to_hash
       hash = genus_labels.to_hash.merge(path_labels.to_hash)
-      hash = hash.merge('oid' => oid) if oid?
+      hash = hash.merge(:oid => oid) if oid?
       hash
     end
 
