@@ -7,13 +7,12 @@ module Pebbles
 
       NO_MARKER = Class.new
 
-      attr_reader :values, :name, :suffix, :stop, :verbose
+      attr_reader :values, :name, :suffix, :stop
 
       def initialize(values, options = {})
         @values = values
         @name = options.fetch(:name) { 'label' }
         @suffix = options.fetch(:suffix) { nil }
-        @verbose = options.fetch(:verbose) { true }
         @stop = options.fetch(:stop) { NO_MARKER }
         if values.last == '*'
           @stop = NO_MARKER
@@ -21,15 +20,11 @@ module Pebbles
         end
       end
 
-      alias :verbose? :verbose
-
       def next
         label(values.length)
       end
 
       def to_hash
-        return {label => values.join('.')} unless verbose?
-
         collection = labelize
         collection.merge!(stop_label) if use_stop_marker?
         collection

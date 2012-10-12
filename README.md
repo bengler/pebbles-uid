@@ -194,13 +194,7 @@ Or install it yourself as:
     => 'post.card:tourism.norway.fjords$1234'
 
     uid.to_hash
-    => {'genus' => 'post.card', 'path_0' => 'tourism', 'path_1' => 'norway', 'path_2' => 'fjords', 'oid' => '1234'}
-
-    uid.to_hash(:verbose => true, :suffix => '')
-    => {'genus_0_' => 'post', 'genus_1_' => 'card', 'path_0_' => 'tourism', 'path_1_' => 'norway', 'path_2_' => 'fjords', 'oid_' => '1234'}
-
-    uid.to_hash(:verbose => true, :suffix => 'xyz', :genus => 'klass', :path => 'label' => :oid => 'id')
-    => {'klass_0_xyz' => 'post', 'klass_1_xyz' => 'card', 'label_0_xyz' => 'tourism', 'label_1_xyz' => 'norway', 'label_2_xyz' => 'fjords', 'id_xyz' => '1234'}
+    => {'genus_0' => 'post', 'genus_1' => 'card', 'path_0' => 'tourism', 'path_1' => 'norway', 'path_2' => 'fjords', 'oid' => '1234'}
 
 ## TODO
 

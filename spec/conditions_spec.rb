@@ -11,16 +11,6 @@ describe Pebbles::Uid::Conditions do
     its(:to_hash) { should eq('dot_0_' => 'p', 'dot_1_' => 'r', 'dot_2_' => 'q') }
   end
 
-  it "has a non-verbose mode" do
-    uid = Pebbles::Uid::Conditions.new(%w(k l m), :name => 'stuff', :verbose => false)
-    uid.to_hash.should eq({'stuff' => 'k.l.m'})
-  end
-
-  specify "non-verbose still takes a suffix" do
-    uid = Pebbles::Uid::Conditions.new(%w(k l m), :name => 'stuff', :verbose => false, :suffix => 'xyz')
-    uid.to_hash.should eq({'stuff_xyz' => 'k.l.m'})
-  end
-
   describe "with a stop label" do
     subject { Pebbles::Uid::Conditions.new(%w(x y z), :stop => nil) }
     its(:to_hash) {  should eq('label_0' => "x", 'label_1' => "y", 'label_2' => "z", 'label_3' => nil) }
