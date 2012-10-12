@@ -117,6 +117,12 @@ module Pebbles
       [genus, path, oid].compact
     end
 
+    def to_hash
+      hash = genus_labels.to_hash(:name => 'genus').merge(path_labels.to_hash(:name => 'path'))
+      hash = hash.merge('oid' => oid) if oid?
+      hash
+    end
+
     def cache_key
       "#{genus}:#{realm}.*$#{oid}"
     end
