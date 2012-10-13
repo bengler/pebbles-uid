@@ -196,6 +196,20 @@ Or install it yourself as:
     uid.to_hash
     => {'genus_0' => 'post', 'genus_1' => 'card', 'path_0' => 'tourism', 'path_1' => 'norway', 'path_2' => 'fjords', 'oid' => '1234'}
 
+### Uid Queries
+
+
+    query = Pebbles::Uid::Query.new('post.card:tourism.^norway.fjords|mountains.*')
+
+    query.list?
+    => false
+
+    query.wildcard?
+    => true
+
+    query.to_hash
+    => {'genus_0' => 'post', 'genus_1' => 'card', 'path_0' => 'tourism', 'path_1' => ['norway', nil], ['fjords', 'mountains', nil]}
+
 ## TODO
 
 [ ] handle caching for path-specific queries(*)
