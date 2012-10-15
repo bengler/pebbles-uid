@@ -205,7 +205,7 @@ query = Pebbles::Uid::Query.new('post.card:tourism.^norway.fjords|mountains.*')
 query.list?
 => false
 
-query.wildcard?
+query.collection?
 => true
 
 query.to_hash
