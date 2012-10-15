@@ -4,7 +4,7 @@ module Pebbles
 
       NO_MARKER = Class.new
 
-      attr_reader :values, :name, :suffix, :stop
+      attr_reader :values, :name, :suffix, :stop, :max_depth
       def initialize(*values)
         options = values.pop if values.last.is_a?(Hash)
         options ||= {}
@@ -12,6 +12,7 @@ module Pebbles
         @name = options[:name]
         @suffix = options[:suffix]
         @stop = options.fetch(:stop) { NO_MARKER }
+        @max_depth = options[:max_depth]
       end
 
       def first
@@ -69,7 +70,7 @@ module Pebbles
       end
 
       def use_stop_marker?
-        stop != NO_MARKER
+        stop != NO_MARKER && !(values.size == max_depth)
       end
 
     end

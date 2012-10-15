@@ -16,6 +16,11 @@ describe Pebbles::Uid::Conditions do
     its(:to_hash) {  should eq(:label_0 => "x", :label_1 => "y", :label_2 => "z", :label_3 => nil) }
   end
 
+  describe "stop label and max depth" do
+    subject { Pebbles::Uid::Conditions.new(%w(x y z), :stop => nil, :max_depth => 3) }
+    its(:to_hash) {  should eq(:label_0 => "x", :label_1 => "y", :label_2 => "z") }
+  end
+
   describe "next label" do
     subject { Pebbles::Uid::Conditions.new(%w(h j k l), :name => 'vim') }
     its(:next) { should eq(:vim_4) }

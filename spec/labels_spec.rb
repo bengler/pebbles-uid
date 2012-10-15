@@ -22,6 +22,11 @@ describe Pebbles::Uid::Labels do
     uid.to_hash.should eq(:whatevs_0_hey => 'a', :whatevs_1_hey => 'b', :whatevs_2_hey => 'c')
   end
 
+  it "handles max-depth" do
+    uid = Pebbles::Uid::Labels.new('a.b.c', :name => 'label', :stop => 'HALT', :max_depth => 3)
+    uid.to_hash.should eq(:label_0 => 'a', :label_1 => 'b', :label_2 => 'c')
+  end
+
   describe "alternate constructors" do
     it { Pebbles::Uid::Labels.new('a', 'b', 'c').to_s.should eq('a.b.c') }
     it { Pebbles::Uid::Labels.new(['a', 'b', 'c']).to_s.should eq('a.b.c') }

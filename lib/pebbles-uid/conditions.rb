@@ -7,10 +7,11 @@ module Pebbles
 
       NO_MARKER = Class.new
 
-      attr_reader :values, :name, :suffix, :stop
+      attr_reader :values, :name, :suffix, :stop, :max_depth
 
       def initialize(values, options = {})
         @values = values
+        @max_depth = options[:max_depth]
         @name = options.fetch(:name) { 'label' }
         @suffix = options.fetch(:suffix) { nil }
         @stop = options.fetch(:stop) { NO_MARKER }
@@ -60,7 +61,7 @@ module Pebbles
       end
 
       def use_stop_marker?
-        stop != NO_MARKER
+        stop != NO_MARKER && !(values.size == max_depth)
       end
 
     end
