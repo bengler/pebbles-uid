@@ -1,5 +1,5 @@
 module Pebbles
   class Uid
-    VERSION = "0.0.3"
+    VERSION = "0.0.4"
   end
 end
