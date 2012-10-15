@@ -1,5 +1,6 @@
 require "pebbles-uid/version"
 
+require 'pebbles-uid/wildcard'
 require 'pebbles-uid/parse'
 require 'pebbles-uid/cache_key'
 require 'pebbles-uid/query'
