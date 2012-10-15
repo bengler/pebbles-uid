@@ -147,6 +147,12 @@ describe Pebbles::Uid::Query do
       its(:next_path_label) { should == :label_1_ }
     end
 
+    context "a search with stops" do
+      subject { Pebbles::Uid::Query.new('beast:myths$*', :genus => 'klass', :path => 'label', :suffix => '', :stop => nil) }
+      its(:to_hash) { should == {:klass_0_ => 'beast', :klass_1_ => nil, :label_0_ => 'myths', :label_1_ => nil} }
+      its(:next_path_label) { should == :label_1_ }
+    end
+
   end
 
 end

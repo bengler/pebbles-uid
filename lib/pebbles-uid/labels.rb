@@ -2,13 +2,16 @@ module Pebbles
   class Uid
     class Labels
 
-      attr_reader :values, :name, :suffix
+      NO_MARKER = Class.new
+
+      attr_reader :values, :name, :suffix, :stop
       def initialize(*values)
         options = values.pop if values.last.is_a?(Hash)
         options ||= {}
         @values = values.flatten.compact.map {|v| v.split('.') }.flatten
         @name = options[:name]
         @suffix = options[:suffix]
+        @stop = options.fetch(:stop) { NO_MARKER }
       end
 
       def first
@@ -57,7 +60,16 @@ module Pebbles
       end
 
       def conditions
-        @conditions ||= Conditions.new(values, {:name => name, :suffix => suffix})
+        unless @conditions
+          options = {:name => name, :suffix => suffix}
+          options.merge!(:stop => stop) if use_stop_marker?
+          @conditions = Conditions.new(values, options)
+        end
+        @conditions
+      end
+
+      def use_stop_marker?
+        stop != NO_MARKER
       end
 
     end

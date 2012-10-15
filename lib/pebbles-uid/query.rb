@@ -2,13 +2,16 @@ module Pebbles
   class Uid
     class Query
 
+      NO_MARKER = Class.new
+
       attr_reader :term, :terms, :genus, :path, :oid,
-        :genus_name, :path_name, :suffix
+        :genus_name, :path_name, :suffix, :stop
       def initialize(term, options = {})
         @term = term
         @genus_name = options.fetch(:genus) { 'genus' }
         @path_name = options.fetch(:path) { 'path' }
         @suffix = options[:suffix]
+        @stop = options.fetch(:stop) { NO_MARKER }
 
         if wildcard_query?
           @terms = [term]
@@ -74,11 +77,21 @@ module Pebbles
       private
 
       def genus_wrapper
-        @genus_wrapper ||= Labels.new(genus, :name => genus_name, :suffix => suffix)
+        unless @genus_wrapper
+          options = {:name => genus_name, :suffix => suffix}
+          options.merge!(:stop => stop) if use_stop_marker?
+          @genus_wrapper = Labels.new(genus, options)
+        end
+        @genus_wrapper
       end
 
       def path_wrapper
-        @path_wrapper ||= Labels.new(path, :name => path_name, :suffix => suffix)
+        unless @path_wrapper
+          options = {:name => path_name, :suffix => suffix}
+          options.merge!(:stop => stop) if use_stop_marker?
+          @path_wrapper = Labels.new(path, options)
+        end
+        @path_wrapper
       end
 
       def wildcard_query?
@@ -113,6 +126,9 @@ module Pebbles
         end.flatten
       end
 
+      def use_stop_marker?
+        stop != NO_MARKER
+      end
     end
   end
 end
