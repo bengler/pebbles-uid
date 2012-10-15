@@ -12,9 +12,12 @@ module Pebbles
 
         if wildcard_query?
           @terms = [term]
-          @genus, @path, @oid = Pebbles::Uid.parse(term)
         else
           @terms = extract_terms
+        end
+
+        if !list?
+          @genus, @path, @oid = Pebbles::Uid.parse(term)
         end
       end
 

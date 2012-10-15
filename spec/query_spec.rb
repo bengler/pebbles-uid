@@ -17,6 +17,7 @@ describe Pebbles::Uid::Query do
     its(:list?) { should == false }
     its(:collection?) { should == false }
     its(:cache_keys) { should eq(['post:area51.*$abc']) }
+    its(:to_hash) { should eq(:genus_0 => 'post', :path_0 => 'area51', :oid => 'abc') }
 
     it "handles a wildcard path if realm is given" do
       query = Pebbles::Uid::Query.new('post:area51.*$abc')
