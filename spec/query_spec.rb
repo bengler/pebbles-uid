@@ -33,6 +33,10 @@ describe Pebbles::Uid::Query do
       ->{ Pebbles::Uid::Query.new('post:*$abc') }.should raise_error(ArgumentError)
       ->{ Pebbles::Uid::Query.new('post:$abc') }.should raise_error(ArgumentError)
     end
+
+    it "doesn't have a list of uids" do
+      ->{ subject.list }.should raise_error StandardError
+    end
   end
 
   context "for a list of resources" do
@@ -48,7 +52,7 @@ describe Pebbles::Uid::Query do
     context "by oid" do
       subject { Pebbles::Uid::Query.new("post:area51$abc|xyz") }
 
-      its(:terms) { should eq(['post:area51$abc', 'post:area51$xyz']) }
+      its(:list) { should eq(['post:area51$abc', 'post:area51$xyz']) }
 
       it "can't do hashes under these circumstances" do
         ->{ subject.to_hash }.should raise_error(RuntimeError)
@@ -102,6 +106,10 @@ describe Pebbles::Uid::Query do
       its(:oid?) { should == false }
 
       its(:to_hash) { should == {} }
+
+      it "doesn't have a list of uids" do
+        ->{ subject.list }.should raise_error StandardError
+      end
     end
 
     context "everything, with any oid" do
@@ -147,12 +155,17 @@ describe Pebbles::Uid::Query do
       its(:next_path_label) { should == :label_1_ }
     end
 
+    context "with a wildcard path" do
+      subject { Pebbles::Uid::Query.new('beast:myths.scary') }
+      its(:for_one?) { should == false }
+      its(:collection?) { should == true }
+    end
+
     context "a search with stops" do
       subject { Pebbles::Uid::Query.new('beast:myths$*', :genus => 'klass', :path => 'label', :suffix => '', :stop => nil) }
       its(:to_hash) { should == {:klass_0_ => 'beast', :klass_1_ => nil, :label_0_ => 'myths', :label_1_ => nil} }
       its(:next_path_label) { should == :label_1_ }
     end
-
   end
 
 end

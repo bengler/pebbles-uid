@@ -32,6 +32,13 @@ module Pebbles
         terms.size != 1
       end
 
+      def list
+        if !list?
+          raise "Cannot expand non-list query"
+        end
+        terms
+      end
+
       def collection?
         wildcard_query?
       end
