@@ -140,6 +140,11 @@ describe Pebbles::Uid::Query do
       its(:to_hash) { should == {:oid => 'yak'} }
     end
 
+    context "a typical search" do
+      subject { Pebbles::Uid::Query.new('beast:myths.*', :genus => 'klass', :path => 'label', :suffix => '') }
+      its(:to_hash) { should == {:klass_0_ => 'beast', :label_0_ => 'myths'} }
+    end
+
   end
 
 end

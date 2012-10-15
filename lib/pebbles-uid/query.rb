@@ -2,9 +2,13 @@ module Pebbles
   class Uid
     class Query
 
-      attr_reader :term, :terms, :genus, :path, :oid
-      def initialize(term)
+      attr_reader :term, :terms, :genus, :path, :oid,
+        :genus_name, :path_name, :suffix
+      def initialize(term, options = {})
         @term = term
+        @genus_name = options.fetch(:genus) { 'genus' }
+        @path_name = options.fetch(:path) { 'path' }
+        @suffix = options[:suffix]
 
         if wildcard_query?
           @terms = [term]
@@ -63,11 +67,11 @@ module Pebbles
       private
 
       def genus_wrapper
-        @genus_wrapper ||= Labels.new(genus, :name => 'genus')
+        @genus_wrapper ||= Labels.new(genus, :name => genus_name, :suffix => suffix)
       end
 
       def path_wrapper
-        @path_wrapper ||= Labels.new(path, :name => 'path')
+        @path_wrapper ||= Labels.new(path, :name => path_name, :suffix => suffix)
       end
 
       def wildcard_query?
