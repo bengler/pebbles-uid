@@ -13,6 +13,11 @@ describe Pebbles::Uid::Labels do
     subject.size.should eq(3)
   end
 
+  it "can use a suffix on the hash" do
+    uid = Pebbles::Uid::Labels.new('a.b.c', :name => 'whatevs', :suffix => 'hey')
+    uid.to_hash.should eq(:whatevs_0_hey => 'a', :whatevs_1_hey => 'b', :whatevs_2_hey => 'c')
+  end
+
   describe "alternate constructors" do
     it { Pebbles::Uid::Labels.new('a', 'b', 'c').to_s.should eq('a.b.c') }
     it { Pebbles::Uid::Labels.new(['a', 'b', 'c']).to_s.should eq('a.b.c') }
