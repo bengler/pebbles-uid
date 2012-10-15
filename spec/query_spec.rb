@@ -9,7 +9,7 @@ describe Pebbles::Uid::Query do
 
   context "for a single resource" do
     let(:term) { "post:area51$abc" }
-    subject { Pebbles::Uid::Query.new(term) }
+    subject { Pebbles::Uid::Query.new(term, :suffix => '') }
 
     its(:term) { should == term }
 
@@ -17,7 +17,7 @@ describe Pebbles::Uid::Query do
     its(:list?) { should == false }
     its(:collection?) { should == false }
     its(:cache_keys) { should eq(['post:area51.*$abc']) }
-    its(:to_hash) { should eq(:genus_0 => 'post', :path_0 => 'area51', :oid => 'abc') }
+    its(:to_hash) { should eq(:genus_0_ => 'post', :path_0_ => 'area51', :oid_ => 'abc') }
 
     it "handles a wildcard path if realm is given" do
       query = Pebbles::Uid::Query.new('post:area51.*$abc')
