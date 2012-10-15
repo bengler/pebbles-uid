@@ -17,8 +17,8 @@ module Pebbles
         [genus, path, oid.empty? ? nil : oid]
       end
 
-      def query(s)
-        Pebbles::Uid::Query.new(s)
+      def query(s, options = {})
+        Pebbles::Uid::Query.new(s, options)
       end
 
       def genus(s)

@@ -7,7 +7,7 @@ describe Pebbles::Uid do
   describe "query" do
     it "returns a query object" do
       s = 'post:tourism.*$*'
-      Pebbles::Uid::Query.should_receive(:new).with s
+      Pebbles::Uid::Query.should_receive(:new).with s, {}
       query = Pebbles::Uid.query(s)
     end
   end
