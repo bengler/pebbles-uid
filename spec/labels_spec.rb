@@ -13,6 +13,10 @@ describe Pebbles::Uid::Labels do
     subject.size.should eq(3)
   end
 
+  it "knows the next label" do
+    subject.next_label.should eq(:thing_3)
+  end
+
   it "can use a suffix on the hash" do
     uid = Pebbles::Uid::Labels.new('a.b.c', :name => 'whatevs', :suffix => 'hey')
     uid.to_hash.should eq(:whatevs_0_hey => 'a', :whatevs_1_hey => 'b', :whatevs_2_hey => 'c')

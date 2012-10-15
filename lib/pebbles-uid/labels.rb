@@ -49,7 +49,15 @@ module Pebbles
       end
 
       def to_hash
-        Conditions.new(values, {:name => name, :suffix => suffix}).to_hash
+        conditions.to_hash
+      end
+
+      def next_label
+        conditions.next
+      end
+
+      def conditions
+        @conditions ||= Conditions.new(values, {:name => name, :suffix => suffix})
       end
 
     end
