@@ -67,6 +67,10 @@ module Pebbles
         hash
       end
 
+      def next_path_label
+        path_wrapper.next_label
+      end
+
       private
 
       def genus_wrapper

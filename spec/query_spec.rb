@@ -144,6 +144,7 @@ describe Pebbles::Uid::Query do
     context "a typical search" do
       subject { Pebbles::Uid::Query.new('beast:myths.*', :genus => 'klass', :path => 'label', :suffix => '') }
       its(:to_hash) { should == {:klass_0_ => 'beast', :label_0_ => 'myths'} }
+      its(:next_path_label) { should == :label_1_ }
     end
 
   end
