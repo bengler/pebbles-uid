@@ -30,6 +30,20 @@ describe Pebbles::Uid do
     end
   end
 
+  context "when cloning" do
+    it "replaces genus" do
+      Pebbles::Uid.copy('post:a.b.c$123', :genus => 'page').to_s.should == 'page:a.b.c$123'
+    end
+
+    it "replaces path" do
+      Pebbles::Uid.copy('post:a.b.c$123', :path => 'x.y.z').to_s.should == 'post:x.y.z$123'
+    end
+
+    it "replaces oid" do
+      Pebbles::Uid.copy('post:a.b.c$123', :oid => 'xyz').to_s.should == 'post:a.b.c$xyz'
+    end
+  end
+
   describe "must" do
     specify "have a genus" do
       ->{ Pebbles::Uid.new(':tourism.norway$1') }.should raise_error(ArgumentError)

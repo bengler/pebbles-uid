@@ -18,6 +18,20 @@ module Pebbles
         [genus, path, oid.empty? ? nil : oid]
       end
 
+      def copy(uid, replacements = {})
+        _genus, _path, _oid = parse(uid)
+        genus = replacements.fetch(:genus) { _genus }
+        path = replacements.fetch(:path) { _path }
+        oid = replacements.fetch(:oid) { _oid }
+        new build(genus, path, oid)
+      end
+
+      def build(genus, path, oid)
+        s = "#{genus}:#{path}"
+        s << "$#{oid}" if oid
+        s
+      end
+
       def query(s, options = {})
         Pebbles::Uid::Query.new(s, options)
       end
@@ -109,9 +123,7 @@ module Pebbles
     end
 
     def to_s
-      s = "#{genus}:#{path}"
-      s << "$#{oid}" if oid
-      s
+      Pebbles::Uid.build genus, path, oid
     end
 
     def parsed
