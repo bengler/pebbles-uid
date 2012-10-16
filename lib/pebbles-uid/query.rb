@@ -4,11 +4,11 @@ module Pebbles
 
       NO_MARKER = Class.new
 
-      attr_reader :term, :terms, :genus, :path, :oid,
-        :genus_name, :path_name, :suffix, :stop
+      attr_reader :term, :terms, :species, :path, :oid,
+        :species_name, :path_name, :suffix, :stop
       def initialize(term, options = {})
         @term = term
-        @genus_name = options.fetch(:genus) { 'genus' }
+        @species_name = options.fetch(:species) { 'species' }
         @path_name = options.fetch(:path) { 'path' }
         @suffix = options[:suffix]
         @stop = options.fetch(:stop) { NO_MARKER }
@@ -20,7 +20,7 @@ module Pebbles
         end
 
         if !list?
-          @genus, @path, @oid = Pebbles::Uid.parse(term)
+          @species, @path, @oid = Pebbles::Uid.parse(term)
         end
       end
 
@@ -47,16 +47,16 @@ module Pebbles
         @path && @path.split('.').reject {|s| s == '*'}.length > 0
       end
 
-      def genus?
-        @genus && @genus != '*'
-      end
-
       def species?
-        !genus_wrapper.tail.empty?
+        @species && @species != '*'
       end
 
-      def species
-        genus_wrapper.tail.join('.')
+      def epiteth?
+        !species_wrapper.tail.empty?
+      end
+
+      def epiteth
+        species_wrapper.tail.join('.')
       end
 
       def oid?
@@ -72,7 +72,7 @@ module Pebbles
           raise RuntimeError.new('Cannot compute a conditions hash for a list of uids')
         end
 
-        hash = genus_wrapper.to_hash.merge(path_wrapper.to_hash)
+        hash = species_wrapper.to_hash.merge(path_wrapper.to_hash)
         if oid?
           oid_key = ['oid', suffix].compact.join('_').to_sym
           hash = hash.merge(oid_key => oid)
@@ -86,13 +86,13 @@ module Pebbles
 
       private
 
-      def genus_wrapper
-        unless @genus_wrapper
-          options = {:name => genus_name, :suffix => suffix}
+      def species_wrapper
+        unless @species_wrapper
+          options = {:name => species_name, :suffix => suffix}
           options.merge!(:stop => stop) if use_stop_marker?
-          @genus_wrapper = Labels.new(genus, options)
+          @species_wrapper = Labels.new(species, options)
         end
-        @genus_wrapper
+        @species_wrapper
       end
 
       def path_wrapper
@@ -106,21 +106,21 @@ module Pebbles
 
       def wildcard_query?
         return false if term.include?(',')
-        genus, _, oid = Pebbles::Uid.parse(term)
-        return true if Labels.new(genus).wildcard?
+        species, _, oid = Pebbles::Uid.parse(term)
+        return true if Labels.new(species).wildcard?
         return true if oid.nil? || oid.empty? || oid == '*'
         false
       end
 
       def extract_terms
         term.split(',').map do |uid|
-          _genus, _path, _oid = Pebbles::Uid.parse(uid)
-          genus_labels = Labels.new(_genus)
+          _species, _path, _oid = Pebbles::Uid.parse(uid)
+          species_labels = Labels.new(_species)
           path_labels = Labels.new(_path)
           oid_box = Oid.new(_oid)
 
           raise ArgumentError.new('Realm must be specified') if path_labels.empty? || path_labels.first == '*'
-          raise ArgumentError.new('Genus must unambiguous') if genus_labels.ambiguous?
+          raise ArgumentError.new('Species must unambiguous') if species_labels.ambiguous?
           raise ArgumentError.new('Oid must be unambiguous') if oid_box.ambiguous?
 
           @realm ||= path_labels.first
@@ -128,7 +128,7 @@ module Pebbles
 
           if oid_box.multiple?
             _oid.split('|').map do |s|
-              "#{_genus}:#{_path}$#{s}"
+              "#{_species}:#{_path}$#{s}"
             end
           else
             uid

@@ -1,9 +1,4 @@
-require 'pebbles-uid/parse'
-require 'pebbles-uid/cache_key'
-require 'pebbles-uid/labels'
-require 'pebbles-uid/conditions'
-require 'pebbles-uid/oid'
-require 'pebbles-uid/query'
+require 'pebbles-uid'
 
 describe Pebbles::Uid::Query do
 
@@ -17,7 +12,7 @@ describe Pebbles::Uid::Query do
     its(:list?) { should == false }
     its(:collection?) { should == false }
     its(:cache_keys) { should eq(['post:area51.*$abc']) }
-    its(:to_hash) { should eq(:genus_0_ => 'post', :path_0_ => 'area51', :oid_ => 'abc') }
+    its(:to_hash) { should eq(:species_0_ => 'post', :path_0_ => 'area51', :oid_ => 'abc') }
 
     it "handles a wildcard path if realm is given" do
       query = Pebbles::Uid::Query.new('post:area51.*$abc')
@@ -73,7 +68,7 @@ describe Pebbles::Uid::Query do
       ->{ Pebbles::Uid::Query.new('post:area51$abc,post:area52$xyz') }.should raise_error(ArgumentError)
     end
 
-    it "bails with unspecific genus" do
+    it "bails with unspecific species" do
       ->{ Pebbles::Uid::Query.new('post.*:area51$abc,post:area51$xyz') }.should raise_error(ArgumentError)
     end
 
@@ -101,7 +96,7 @@ describe Pebbles::Uid::Query do
     context "everything" do
       subject { Pebbles::Uid::Query.new('*:*') }
 
-      its(:genus?) { should == false }
+      its(:species?) { should == false }
       its(:path?) { should == false }
       its(:oid?) { should == false }
 
@@ -115,25 +110,25 @@ describe Pebbles::Uid::Query do
     context "everything, with any oid" do
       subject { Pebbles::Uid::Query.new('*:*$*') }
 
-      its(:genus?) { should == false }
+      its(:species?) { should == false }
       its(:path?) { should == false }
       its(:oid?) { should == false }
       its(:to_hash) { should == {} }
     end
 
-    context "a genus" do
+    context "a species" do
       subject { Pebbles::Uid::Query.new('beast:*$*') }
-      its(:genus?) { should == true }
-      its(:genus) { should eq('beast') }
-      its(:species?) { should == false }
-      its(:to_hash) { should == {:genus_0 => 'beast'} }
+      its(:species?) { should == true }
+      its(:species) { should eq('beast') }
+      its(:epiteth?) { should == false }
+      its(:to_hash) { should == {:species_0 => 'beast'} }
     end
 
-    context "a species" do
+    context "a epiteth" do
       subject { Pebbles::Uid::Query.new('beast.mythical.hairy:*$*') }
-      its(:species?) { should == true }
-      its(:species) { should eq('mythical.hairy') }
-      its(:to_hash) { should == {:genus_0 => 'beast', :genus_1 => 'mythical', :genus_2 => 'hairy'} }
+      its(:epiteth?) { should == true }
+      its(:epiteth) { should eq('mythical.hairy') }
+      its(:to_hash) { should == {:species_0 => 'beast', :species_1 => 'mythical', :species_2 => 'hairy'} }
     end
 
     context "a path" do
@@ -150,7 +145,7 @@ describe Pebbles::Uid::Query do
     end
 
     context "a typical search" do
-      subject { Pebbles::Uid::Query.new('beast:myths.*', :genus => 'klass', :path => 'label', :suffix => '') }
+      subject { Pebbles::Uid::Query.new('beast:myths.*', :species => 'klass', :path => 'label', :suffix => '') }
       its(:to_hash) { should == {:klass_0_ => 'beast', :label_0_ => 'myths'} }
       its(:next_path_label) { should == :label_1_ }
     end
@@ -162,7 +157,7 @@ describe Pebbles::Uid::Query do
     end
 
     context "a search with stops" do
-      subject { Pebbles::Uid::Query.new('beast:myths$*', :genus => 'klass', :path => 'label', :suffix => '', :stop => nil) }
+      subject { Pebbles::Uid::Query.new('beast:myths$*', :species => 'klass', :path => 'label', :suffix => '', :stop => nil) }
       its(:to_hash) { should == {:klass_0_ => 'beast', :klass_1_ => nil, :label_0_ => 'myths', :label_1_ => nil} }
       its(:next_path_label) { should == :label_1_ }
     end

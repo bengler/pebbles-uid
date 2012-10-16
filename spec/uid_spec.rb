@@ -14,7 +14,15 @@ describe Pebbles::Uid do
 
   describe "extracts elements" do
     specify "genus" do
-      Pebbles::Uid.genus(uid).should eq('post.card')
+      Pebbles::Uid.genus(uid).should eq('post')
+    end
+
+    specify "species" do
+      Pebbles::Uid.species(uid).should eq('post.card')
+    end
+
+    specify "epiteth" do
+      Pebbles::Uid.epiteth('post.picture.card:a.b.c$1').should eq('picture.card')
     end
 
     specify "path" do
@@ -31,7 +39,7 @@ describe Pebbles::Uid do
   end
 
   describe "must" do
-    specify "have a genus" do
+    specify "have a species" do
       ->{ Pebbles::Uid.new(':tourism.norway$1') }.should raise_error(ArgumentError)
     end
 
@@ -47,7 +55,7 @@ describe Pebbles::Uid do
   end
 
   describe "rejects" do
-    it "wildcard genus" do
+    it "wildcard species" do
       ->{ Pebbles::Uid.new('post.*:tourism$1') }.should raise_error(ArgumentError)
       ->{ Pebbles::Uid.new('post|card:tourism$1') }.should raise_error(ArgumentError)
       ->{ Pebbles::Uid.new('post.^b.c:tourism$1') }.should raise_error(ArgumentError)
@@ -78,10 +86,10 @@ describe Pebbles::Uid do
     end
   end
 
-  context "genus" do
+  context "species" do
     %w(- . _ 8).each do |char|
-      it "accepts #{char} in a genus" do
-        Pebbles::Uid.valid_genus?("uni#{char}corn").should == true
+      it "accepts #{char} in a species" do
+        Pebbles::Uid.valid_species?("uni#{char}corn").should == true
       end
     end
 
@@ -120,8 +128,9 @@ describe Pebbles::Uid do
 
     its(:to_s) { should eq(uid) }
     its(:realm) { should eq('tourism') }
-    its(:genus) { should eq('post.card') }
-    its(:species) { should eq('card') }
+    its(:genus) { should eq('post') }
+    its(:species) { should eq('post.card') }
+    its(:epiteth) { should eq('card') }
     its(:path) { should eq('tourism.norway.fjords') }
     its(:oid) { should eq('1234') }
     its(:oid?) { should == true }
@@ -129,12 +138,12 @@ describe Pebbles::Uid do
     its(:cache_key) { should eq('post.card:tourism.*$1234') }
 
     its(:to_hash) do
-      should eq(:genus_0 => 'post', :genus_1 => 'card', :path_0 => 'tourism', :path_1 => 'norway', :path_2 => 'fjords', :oid => '1234')
+      should eq(:species_0 => 'post', :species_1 => 'card', :path_0 => 'tourism', :path_1 => 'norway', :path_2 => 'fjords', :oid => '1234')
     end
 
     context "without an oid" do
       it "excludes the oid key from the hash" do
-        Pebbles::Uid.new('post.doc:a.b.c').to_hash.should eq(:genus_0 => 'post', :genus_1 => 'doc', :path_0 => 'a', :path_1 => 'b', :path_2 => 'c')
+        Pebbles::Uid.new('post.doc:a.b.c').to_hash.should eq(:species_0 => 'post', :species_1 => 'doc', :path_0 => 'a', :path_1 => 'b', :path_2 => 'c')
       end
     end
 
