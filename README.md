@@ -4,21 +4,21 @@ Handle unique identifiers in the Pebblestack universe conveniently.
 
 ## Unique Identifiers
 
-A valid Uid is in the format `genus[.species]:path[$oid]`.
+A valid Uid is in the format `genus[.epiteth]:path[$oid]`.
 
-### Genus
+### Species
 
-The genus is one or more dot-delimited labels.
+The species is one or more dot-delimited labels.
 
-The first label uniquely identifies which pebble the resource originated from.
+The first label,  the genus, uniquely identifies which pebble the resource originated from.
 
-Any secondary labels are grouped into a `species`, which identify sub-types within a given pebble.
+Any secondary labels are grouped into an `epiteth`, which identify sub-types within a given pebble.
 
 ```
 post.doc
 ```
 
-Here the genus is `post`, and the species is `doc`.
+Here the genus is `post`, and the epiteth is `doc`.
 
 ### Path
 
@@ -35,7 +35,7 @@ post.card:tourism.norway.west-coast$42
 
 The object identifier can be nearly any string, including another uid.
 
-The oid _MUST_ be unique for any genus and realm.
+The oid _MUST_ be unique for any species and realm.
 
 There are currently two characters which cannot be included in an oid:
 
@@ -49,19 +49,19 @@ Oid is optional when creating a new resource.
 
 Across the pebblestack universe, you can query for a specific resource by passing a full Uid.
 
-In addition, the wildcard query `genus:realm.*$oid` will identify a single resource, e.g.:
+In addition, the wildcard query `species:realm.*$oid` will identify a single resource, e.g.:
 
 ```
 post.card:tourism.*$42
 ```
 
-If a specific resource is targeted (i.e. genus and oid are both unambiguous), then realm is required.
+If a specific resource is targeted (i.e. species and oid are both unambiguous), then realm is required.
 
 ### For a collection of resources
 
 #### Asterisks
 
-The most permissive query consists of any genus in any path, with any oid (implied):
+The most permissive query consists of any species in any path, with any oid (implied):
 
 ```
 *:*
@@ -75,7 +75,7 @@ This is the equivalent to:
 
 Queries may not be made across multiple realms at one time. If realm is not specified in the path, then it is assumed that the application verifies realm if necessary.
 
-In the context of a genus or a path, you may specify any number of labels and terminate with an asterisk, which means: zero or more labels follow. E.g.:
+In the context of a species or a path, you may specify any number of labels and terminate with an asterisk, which means: zero or more labels follow. E.g.:
 
 ```
 post.*:tourism.europe.*
@@ -99,7 +99,7 @@ In the context of an oid, you either know the oid you want, or you don't. A quer
 
 A pipe signifies _or_.
 
-This can be used in genus at any position:
+This can be used in species at any position:
 
 ```
 unit|group:*
@@ -139,7 +139,7 @@ NOTE: realm is required in this case, because each term in the list must refer t
 
 #### Caret
 
-In both genus and paths, a caret indicates ancestry up to the specified point:
+In both species and paths, a caret indicates ancestry up to the specified point:
 
 ```
 post:realm.europe.^norway.fjords.food
@@ -178,10 +178,13 @@ uid = Pebbles::Uid.new('post.card:tourism.norway.fjords$1234')
 uid.realm
 => "tourism"
 
-uid.genus
+uid.species
 => "post.card"
 
-uid.species
+uid.genus
+=> "post"
+
+uid.epiteth
 => "card"
 
 uid.path
@@ -194,7 +197,7 @@ uid.to_s
 => 'post.card:tourism.norway.fjords$1234'
 
 uid.to_hash
-=> {'genus_0' => 'post', 'genus_1' => 'card', 'path_0' => 'tourism', 'path_1' => 'norway', 'path_2' => 'fjords', 'oid' => '1234'}
+=> {'species_0' => 'post', 'species_1' => 'card', 'path_0' => 'tourism', 'path_1' => 'norway', 'path_2' => 'fjords', 'oid' => '1234'}
 ```
 
 ### Uid Queries
@@ -209,7 +212,7 @@ query.collection?
 => true
 
 query.to_hash
-=> {'genus_0' => 'post', 'genus_1' => 'card', 'path_0' => 'tourism', 'path_1' => ['norway', nil], ['fjords', 'mountains', nil]}
+=> {'species_0' => 'post', 'species_1' => 'card', 'path_0' => 'tourism', 'path_1' => ['norway', nil], ['fjords', 'mountains', nil]}
 ```
 
 ## TODO
