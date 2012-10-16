@@ -10,7 +10,7 @@ A valid Uid is in the format `genus[.epiteth]:path[$oid]`.
 
 The species is one or more dot-delimited labels.
 
-The first label,  the genus, uniquely identifies which pebble the resource originated from.
+The first label, the genus, uniquely identifies which pebble the resource originated from.
 
 Any secondary labels are grouped into an `epiteth`, which identify sub-types within a given pebble.
 
