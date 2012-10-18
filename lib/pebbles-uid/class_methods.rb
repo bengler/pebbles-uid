@@ -4,7 +4,7 @@ module Pebbles
 
       def parse(s)
         /^(?<species>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
-        [species, path, oid.empty? ? nil : oid]
+        [species, path, oid && oid.empty? ? nil : oid]
       end
 
       def build(species, path, oid)

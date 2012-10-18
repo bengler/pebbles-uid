@@ -36,6 +36,14 @@ describe Pebbles::Uid do
     specify "non-existant oid" do
       Pebbles::Uid.oid('post:a.b.c').should be_nil
     end
+
+    specify "unspecified oid" do
+      Pebbles::Uid.oid('post:a.b.c$').should be_nil
+    end
+
+    specify "invalid uid" do
+      Pebbles::Uid.oid('1').should be_nil
+    end
   end
 
   describe "must" do
