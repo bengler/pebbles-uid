@@ -19,7 +19,9 @@ module Pebbles
           @terms = extract_terms
         end
 
-        if !list?
+        if list?
+          @species, @path, _ = Pebbles::Uid.parse(terms.first)
+        else
           @species, @path, @oid = Pebbles::Uid.parse(term)
         end
       end
@@ -53,6 +55,10 @@ module Pebbles
 
       def epiteth?
         !species_wrapper.tail.empty?
+      end
+
+      def genus
+        species.split('.').first
       end
 
       def epiteth

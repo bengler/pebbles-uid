@@ -3,7 +3,7 @@ require 'pebbles-uid'
 describe Pebbles::Uid::Query do
 
   context "for a single resource" do
-    let(:term) { "post:area51$abc" }
+    let(:term) { "post.doc:area51$abc" }
     subject { Pebbles::Uid::Query.new(term, :suffix => '') }
 
     its(:term) { should == term }
@@ -11,8 +11,12 @@ describe Pebbles::Uid::Query do
     its(:for_one?) { should == true }
     its(:list?) { should == false }
     its(:collection?) { should == false }
-    its(:cache_keys) { should eq(['post:area51.*$abc']) }
-    its(:to_hash) { should eq(:species_0_ => 'post', :path_0_ => 'area51', :oid_ => 'abc') }
+    its(:cache_keys) { should eq(['post.doc:area51.*$abc']) }
+    its(:to_hash) { should eq(:species_0_ => 'post', :species_1_ => 'doc', :path_0_ => 'area51', :oid_ => 'abc') }
+    its(:genus) { should == 'post' }
+    its(:species) { should == 'post.doc' }
+    its(:path) { should == 'area51' }
+    its(:oid) { should == 'abc' }
 
     it "handles a wildcard path if realm is given" do
       query = Pebbles::Uid::Query.new('post:area51.*$abc')
@@ -35,14 +39,17 @@ describe Pebbles::Uid::Query do
   end
 
   context "for a list of resources" do
-    let(:term) { "post:area51$abc,post:area51$xyz" }
+    let(:term) { "post.doc:area51$abc,post.doc:area51$xyz" }
     subject { Pebbles::Uid::Query.new(term) }
 
     its(:for_one?) { should == false }
     its(:list?) { should == true }
     its(:collection?) { should == false }
+    its(:genus) { should == 'post' }
 
-    its(:cache_keys) { should eq(['post:area51.*$abc', 'post:area51.*$xyz']) }
+    its(:cache_keys) { should eq(['post.doc:area51.*$abc', 'post.doc:area51.*$xyz']) }
+
+    it "only accepts one single genus"
 
     context "by oid" do
       subject { Pebbles::Uid::Query.new("post:area51$abc|xyz") }
