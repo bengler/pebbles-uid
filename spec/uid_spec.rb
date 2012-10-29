@@ -12,7 +12,7 @@ describe Pebbles::Uid do
     end
   end
 
-  describe "extracts elements" do
+  describe "extracts" do
     specify "genus" do
       Pebbles::Uid.genus(uid).should eq('post')
     end
@@ -33,16 +33,22 @@ describe Pebbles::Uid do
       Pebbles::Uid.oid(uid).should eq('1234')
     end
 
-    specify "non-existant oid" do
-      Pebbles::Uid.oid('post:a.b.c').should be_nil
+    describe "when oid is non-existant" do
+      it "returns nil oid" do
+        Pebbles::Uid.oid('post:a.b.c').should be_nil
+      end
     end
 
-    specify "unspecified oid" do
-      Pebbles::Uid.oid('post:a.b.c$').should be_nil
+    describe "when oid is empty" do
+      it "returns nil oid" do
+        Pebbles::Uid.oid('post:a.b.c$').should be_nil
+      end
     end
 
-    specify "invalid uid" do
-      Pebbles::Uid.oid('1').should be_nil
+    describe "when uid is invalid" do
+      it "returns nil oid" do
+        Pebbles::Uid.oid('1').should be_nil
+      end
     end
   end
 
