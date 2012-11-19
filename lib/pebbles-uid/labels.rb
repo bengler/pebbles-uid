@@ -1,6 +1,7 @@
 module Pebbles
   class Uid
     class Labels
+      include Enumerable
 
       NO_MARKER = Class.new
 
@@ -15,12 +16,20 @@ module Pebbles
         @max_depth = options[:max_depth]
       end
 
-      def first
-        values.first
+      def each(&block)
+        values.each {|value| yield value}
       end
 
       def tail
         values[1..-1]
+      end
+
+      def parent_of?(other)
+        parent = true
+        values.each_with_index do |value, i|
+          parent = false unless value == other.values[i]
+        end
+        parent
       end
 
       def ambiguous?
@@ -33,10 +42,6 @@ module Pebbles
 
       def size
         values.size
-      end
-
-      def to_a
-        values
       end
 
       def to_s

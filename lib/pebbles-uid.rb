@@ -6,6 +6,7 @@ require 'pebbles-uid/query'
 require "pebbles-uid/conditions"
 require "pebbles-uid/labels"
 require "pebbles-uid/oid"
+require "pebbles-uid/roots"
 
 module Pebbles
   class Uid
