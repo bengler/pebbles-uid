@@ -55,4 +55,15 @@ describe Pebbles::Uid::Labels do
     specify { a_b_c.parent_of?(a_b_d).should == false }
   end
 
+  context "#child_of?" do
+    let(:a) { Pebbles::Uid::Labels.new('a') }
+    let(:b) { Pebbles::Uid::Labels.new('b') }
+    let(:a_b) { Pebbles::Uid::Labels.new('a.b') }
+
+    specify { a.child_of?(a).should == false }
+    specify { a_b.child_of?(a).should == true }
+    specify { a.child_of?(b).should == false }
+    specify { a.child_of?(a_b).should == false }
+  end
+
 end

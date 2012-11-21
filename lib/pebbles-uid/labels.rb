@@ -33,6 +33,16 @@ module Pebbles
         parent
       end
 
+      def child_of?(other)
+        child = true
+        other.values.each_with_index do |label, i|
+          if label != values[i]
+            child = false
+          end
+        end
+        child && other.size != size
+      end
+
       def ambiguous?
         value == '*' || values.empty? || wildcard?
       end
