@@ -25,6 +25,7 @@ module Pebbles
       end
 
       def parent_of?(other)
+        return false if values == other.values
         parent = true
         values.each_with_index do |value, i|
           parent = false unless value == other.values[i]

@@ -49,10 +49,10 @@ describe Pebbles::Uid::Labels do
     let(:a_b_c) { Pebbles::Uid::Labels.new('a.b.c') }
     let(:a_b_d) { Pebbles::Uid::Labels.new('a.b.d') }
 
-    it "works" do
-      a.parent_of?(a_b_c).should == true
-      a_b_c.parent_of?(a_b_d).should == false
-    end
+    specify { a.parent_of?(a).should == false }
+    specify { a_b_c.parent_of?(a).should == false }
+    specify { a.parent_of?(a_b_c).should == true }
+    specify { a_b_c.parent_of?(a_b_d).should == false }
   end
 
 end
