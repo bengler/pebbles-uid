@@ -1,14 +1,27 @@
 module Pebbles
   class Uid
-    def self.root_paths(uids)
-      paths = uids.map { |uid| Labels.new(Pebbles::Uid.path(uid)) }
-      roots = [paths.first]
-      paths[1..-1].each { |path|
-        roots.each { |root|
-          roots << path unless root.parent_of?(path)
+    class Roots
+
+      attr_reader :paths
+      def initialize(uids)
+        @paths = {}
+        uids.each { |uid|
+          @paths[uid] = Labels.new(Pebbles::Uid.path(uid))
         }
-      }
-      roots.map(&:to_s)
+      end
+
+      def unique
+        unless @unique
+          @unique = []
+          paths.each do |uid, path|
+            unless paths.any? { |_, other| path.child_of?(other) }
+              @unique << uid
+            end
+          end
+        end
+        @unique
+      end
+
     end
   end
 end

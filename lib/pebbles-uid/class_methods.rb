@@ -2,6 +2,10 @@ module Pebbles
   class Uid
     class << self
 
+      def roots(uids)
+        Pebbles::Uid::Roots.new(uids).unique
+      end
+
       def parse(s)
         /^(?<species>.*):(?<path>[^\$]*)\$?(?<oid>.*)$/ =~ s
         [species, path, oid && oid.empty? ? nil : oid]
