@@ -27,11 +27,11 @@ module Pebbles
       end
 
       def for_one?
-        !wildcard_query? && terms.size == 1
+        !wildcard_query? && !list?
       end
 
       def list?
-        terms.size != 1
+        terms.size != 1 or term.strip[-1..-1] == ","
       end
 
       def list

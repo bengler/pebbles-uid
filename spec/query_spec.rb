@@ -84,6 +84,14 @@ describe Pebbles::Uid::Query do
     end
   end
 
+  context "for a list of resources, with one entry, but tailing comma - indicating a list" do
+    let(:term) { "post.doc:area51$abc," }
+    subject { Pebbles::Uid::Query.new(term) }
+
+    its(:for_one?) { should == false }
+    its(:list?) { should == true }
+  end
+
   context "for a collection of resources" do
     let(:term) { "post.*:area51.^a.b.c" }
     subject { Pebbles::Uid::Query.new(term) }
