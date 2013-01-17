@@ -96,5 +96,9 @@ module Pebbles
       "#{species}:#{realm}.*$#{oid}"
     end
 
+    def parent(parent_species = species)
+      "#{parent_species}:#{path_labels.values[0..-2].join('.')}$#{path_labels.values.last}"
+    end
+
   end
 end

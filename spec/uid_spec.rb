@@ -148,6 +148,10 @@ describe Pebbles::Uid do
     its(:path) { should eq('tourism.norway.fjords') }
     its(:oid) { should eq('1234') }
     its(:oid?) { should == true }
+    its(:parent) { should eq('post.card:tourism.norway$fjords') }
+    it "has a parent with a different species" do
+      subject.parent('stuff').should eq('stuff:tourism.norway$fjords')
+    end
 
     its(:cache_key) { should eq('post.card:tourism.*$1234') }
 
