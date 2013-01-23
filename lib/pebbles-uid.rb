@@ -100,5 +100,9 @@ module Pebbles
       "#{parent_species}:#{path_labels.values[0..-2].join('.')}$#{path_labels.values.last}"
     end
 
+    def child_path
+      "#{path}.#{oid}"
+    end
+
   end
 end

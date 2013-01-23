@@ -153,6 +153,8 @@ describe Pebbles::Uid do
       subject.parent('stuff').should eq('stuff:tourism.norway$fjords')
     end
 
+    its(:child_path) { should eq('tourism.norway.fjords.1234') }
+
     its(:cache_key) { should eq('post.card:tourism.*$1234') }
 
     its(:to_hash) do
