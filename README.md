@@ -43,6 +43,26 @@ There are currently two characters which cannot be included in an oid:
 
 Oid is optional when creating a new resource.
 
+## Relations
+
+A convention has emerged where the path of an object who belongs in a category
+is built up using the category's path, with the category's oid, appended.
+
+I.e.
+
+```ruby
+category = Pebbles::Uid.new('post.doc:edu.uni.abc$123')
+thing = Pebbles::Uid.new('course:edu.uni.abc.123$456')
+
+thing.parent
+# => 'course:edu.uni.abc$123'
+thing.parent('post.doc')
+# => 'post.doc:edu.uni.abc$123'
+
+category.child_path
+# => 'edu.uni.abc.123'
+```
+
 ## Queries
 
 ### For one specific resource
