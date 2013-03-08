@@ -61,6 +61,11 @@ thing.parent('post.doc')
 
 category.child_path
 # => 'edu.uni.abc.123'
+
+category.children
+# => '*:edu.uni.abc.123'
+category.children('post.subcategory')
+# => 'post.subcategory:edu.uni.abc.123'
 ```
 
 ## Queries

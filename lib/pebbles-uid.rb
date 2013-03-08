@@ -104,5 +104,9 @@ module Pebbles
       "#{path}.#{oid}"
     end
 
+    def children(child_species = '*')
+      "#{child_species}:#{child_path}"
+    end
+
   end
 end

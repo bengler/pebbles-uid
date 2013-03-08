@@ -155,6 +155,11 @@ describe Pebbles::Uid do
 
     its(:child_path) { should eq('tourism.norway.fjords.1234') }
 
+    its(:children) { should eq('*:tourism.norway.fjords.1234')}
+    it "has children of a certain species" do
+      subject.children('stuff').should eq('stuff:tourism.norway.fjords.1234')
+    end
+
     its(:cache_key) { should eq('post.card:tourism.*$1234') }
 
     its(:to_hash) do
