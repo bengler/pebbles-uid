@@ -27,7 +27,7 @@ module Pebbles
       end
 
       def for_one?
-        !wildcard_query? && !list?
+        oid?
       end
 
       def list?
@@ -42,7 +42,7 @@ module Pebbles
       end
 
       def collection?
-        wildcard_query?
+        !for_one? && !list?
       end
 
       def path?
