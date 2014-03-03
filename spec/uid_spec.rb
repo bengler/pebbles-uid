@@ -45,6 +45,14 @@ describe Pebbles::Uid do
       end
     end
 
+    describe "when oid contains a colon" do
+      it "correctly parses klass, path and oid" do
+        Pebbles::Uid.new('post:tourism$:foo').oid.should eq ':foo'
+        Pebbles::Uid.new('post:tourism$fo:o').oid.should eq 'fo:o'
+        Pebbles::Uid.new('post.foo:tourism$:foo').species.should eq 'post.foo'
+      end
+    end
+
     describe "when uid is invalid" do
       it "returns nil oid" do
         Pebbles::Uid.oid('1').should be_nil
