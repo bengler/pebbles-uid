@@ -5,7 +5,12 @@ module Pebbles
       class << self
 
         def valid?(path)
-          stars_are_solitary?(path) && single_caret?(path) && pipes_are_interleaved?(path) && carets_are_leading?(path) && stars_are_terminating?(path)
+          path &&
+            stars_are_solitary?(path) &&
+            single_caret?(path) &&
+            pipes_are_interleaved?(path) &&
+            carets_are_leading?(path) &&
+            stars_are_terminating?(path)
         end
 
         # a.*.c passes

@@ -7,6 +7,16 @@ describe Pebbles::Uid::Wildcard do
     Pebbles::Uid::Wildcard.valid?('a.b.d').should == true
   end
 
+  describe '#valid?' do
+    it 'returns false for nil' do
+      expect(Pebbles::Uid::Wildcard.valid?(nil)).to be_false
+    end
+
+    it 'returns true for empty string' do
+      expect(Pebbles::Uid::Wildcard.valid?('')).to be_true
+    end
+  end
+
   context "terminating asterisk representing entire label" do
     [
       '*', 'a.b.c.*', 'a.b|c.*', 'a.^b.c.*'
