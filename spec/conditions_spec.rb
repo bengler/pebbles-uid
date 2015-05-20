@@ -1,4 +1,5 @@
 require 'pebbles-uid/conditions'
+require 'its'
 
 describe Pebbles::Uid::Conditions do
 

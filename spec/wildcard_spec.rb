@@ -9,11 +9,11 @@ describe Pebbles::Uid::Wildcard do
 
   describe '#valid?' do
     it 'returns false for nil' do
-      expect(Pebbles::Uid::Wildcard.valid?(nil)).to be_false
+      Pebbles::Uid::Wildcard.valid?(nil).should == nil
     end
 
     it 'returns true for empty string' do
-      expect(Pebbles::Uid::Wildcard.valid?('')).to be_true
+      Pebbles::Uid::Wildcard.valid?('').should == true
     end
   end
 

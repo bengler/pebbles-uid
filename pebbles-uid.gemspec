@@ -16,4 +16,5 @@ Gem::Specification.new do |gem|
   gem.version       = Pebbles::Uid::VERSION
 
   gem.add_development_dependency "rspec"
+  gem.add_development_dependency "its"
 end
