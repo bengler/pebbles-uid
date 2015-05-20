@@ -31,7 +31,7 @@ module Pebbles
       end
 
       def list?
-        terms.size != 1 or term.strip[-1..-1] == ","
+        terms.size != 1 or %w(, |).include?(term.strip[-1..-1])
       end
 
       def list
