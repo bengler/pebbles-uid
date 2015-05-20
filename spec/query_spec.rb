@@ -67,8 +67,12 @@ describe Pebbles::Uid::Query do
       query.cache_keys.should eq(['post:area51.*$abc', 'post:area51.*$xyz'])
     end
 
-    it "bails without realm" do
-      ->{ Pebbles::Uid::Query.new('post:*$abc,post:*$xyz') }.should raise_error(ArgumentError)
+    it "works with wildcard as class" do
+      Pebbles::Uid::Query.new('*:area51.*$abc|xyz').list?.should == true
+    end
+
+    it "works with a trailing pipe on oid" do
+      Pebbles::Uid::Query.new('*:area51.*$abc|').list?.should == true
     end
 
     it "must have only one realm" do

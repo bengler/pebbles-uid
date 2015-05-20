@@ -1,3 +1,4 @@
+require "its";
 module Pebbles
   class Uid
     class Query
@@ -13,7 +14,9 @@ module Pebbles
         @suffix = options[:suffix]
         @stop = options.fetch(:stop) { NO_MARKER }
 
-        if wildcard_query?
+        if multi_oid_query?
+          @terms = expand_uid(term)
+        elsif wildcard_query?
           @terms = [term]
         else
           @terms = extract_terms
@@ -116,6 +119,27 @@ module Pebbles
         return true if Labels.new(species).wildcard?
         return true if oid.nil? || oid.empty? || oid == '*'
         false
+      end
+
+      def multi_oid_query?
+        _, _, oid = Pebbles::Uid.parse(term)
+        oid and oid.include?('|')
+      end
+
+      def expand_uid(uid)
+        _species, _path, _oid = Pebbles::Uid.parse(uid)
+        path_labels = Labels.new(_path)
+        oid_box = Oid.new(_oid)
+
+        raise ArgumentError.new('Realm must be specified') if path_labels.empty? || path_labels.first == '*'
+
+        if oid_box.multiple?
+          _oid.split('|').map do |s|
+            "#{_species}:#{_path}$#{s}"
+        end
+        else
+          uid
+        end
       end
 
       def extract_terms
