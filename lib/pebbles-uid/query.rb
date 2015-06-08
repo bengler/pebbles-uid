@@ -1,5 +1,3 @@
-require "its"
-
 module Pebbles
   class Uid
     class Query
